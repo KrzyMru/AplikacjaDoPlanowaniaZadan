@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AplikacjaDoPlanowaniaZadan.Server", "AplikacjaDoPlanowaniaZadan.Server\AplikacjaDoPlanowaniaZadan.Server.csproj", "{E13D95FC-3AFC-4818-9449-FB3D70B1D27A}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "aplikacjadoplanowaniazadan.client", "aplikacjadoplanowaniazadan.client\aplikacjadoplanowaniazadan.client.esproj", "{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E13D95FC-3AFC-4818-9449-FB3D70B1D27A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E13D95FC-3AFC-4818-9449-FB3D70B1D27A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E13D95FC-3AFC-4818-9449-FB3D70B1D27A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E13D95FC-3AFC-4818-9449-FB3D70B1D27A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FC2B0E3-216D-4672-9C20-6EA2156CEEE4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9DB8DA4C-C777-4A3A-9944-066DFAD8111A}
+	EndGlobalSection
+EndGlobal
