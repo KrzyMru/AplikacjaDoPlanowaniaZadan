@@ -2,8 +2,8 @@
 {
     public enum Status
     {
-        Low = 0, 
-        Medium = 1, 
-        High = 2
+        Planned = 0,
+        During = 1,
+        Finished = 2,
     }
 }

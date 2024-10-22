@@ -2,8 +2,8 @@
 {
     public enum Priority
     {
-        Planned = 0,
-        During = 1,
-        Finished = 2,
+        Low = 0, 
+        Medium = 1, 
+        High = 2
     }
 }
