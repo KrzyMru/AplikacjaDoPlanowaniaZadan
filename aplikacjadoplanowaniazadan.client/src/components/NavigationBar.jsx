@@ -25,10 +25,10 @@ const navigationRight = [
 
 function NavigationBar() {
 
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    const handleDrawerToggle = () => {
-        setDrawerOpen((prevState) => !prevState);
+    const handleMenuToggle = () => {
+        setMenuOpen((prevState) => !prevState);
     };
 
     return (
@@ -39,7 +39,7 @@ function NavigationBar() {
                         color="inherit"
                         aria-label="open drawer"
                         edge="start"
-                        onClick={handleDrawerToggle}
+                        onClick={handleMenuToggle}
                         sx={{ mr: 2, display: { sm: 'none' } }}
                     >
                         <MenuIcon />
@@ -61,8 +61,8 @@ function NavigationBar() {
             <nav>
                 <Drawer
                     variant="temporary"
-                    open={drawerOpen}
-                    onClose={handleDrawerToggle}
+                    open={menuOpen}
+                    onClose={handleMenuToggle}
                     sx={{
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
                     }}
