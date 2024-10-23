@@ -7,7 +7,7 @@
         public string Description { get; set; }
         public DateTime DueTo { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
-        public Priority Status { get; set; }
-        public Status Priority { get; set; }
+        public Status Status { get; set; }
+        public Priority Priority { get; set; }
     }
 }
