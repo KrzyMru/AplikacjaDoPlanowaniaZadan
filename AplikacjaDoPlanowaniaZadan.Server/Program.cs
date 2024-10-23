@@ -14,8 +14,22 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
+                {
+                    policy
+                        .SetIsOriginAllowed(origin => true)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+            });
+            });
+
             var app = builder.Build();
 
+            app.UseCors("default");
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
@@ -34,6 +48,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
+
+            app.UseCors("CorsPolicy");
 
             app.Run();
         }

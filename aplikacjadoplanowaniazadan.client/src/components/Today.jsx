@@ -25,7 +25,7 @@ export default function Today({ hidden }) {
     const getTodayTasks = async () => {
         setLoading(true);
         try {
-            const response = await fetch("todayTasks", {
+            const response = await fetch("http://localhost:5141/api/task/todayTasks", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export default function Today({ hidden }) {
             const data = await response.json();
             setTodayTasks(data);
         }
-        catch (error) { }
+        catch (error) { console.log(error) }
         finally {
             setLoading(false);
         }
@@ -44,7 +44,7 @@ export default function Today({ hidden }) {
     const deleteTask = async (taskId) => {
         setLoadingAction([...loadingAction, taskId]);
         try {
-            const response = await fetch("deleteTask", {
+            const response = await fetch("http://localhost:5141/api/task/deleteTask", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export default function Today({ hidden }) {
     const completeTask = async (taskId) => {
         try {
             setLoading(true);
-            const response = await fetch("completeTask", {
+            const response = await fetch("http://localhost:5141/api/task/completeTask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function Today({ hidden }) {
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTodayTasks(...todayTasks.filter(task => task.id !== taskId), data);
+            setTodayTasks([...todayTasks.filter(task => task.id !== taskId), data]);
         } catch (error) { }
         finally {
             setLoading(false);
@@ -83,82 +83,6 @@ export default function Today({ hidden }) {
     const [loading, setLoading] = React.useState(false);
     const [loadingAction, setLoadingAction] = React.useState([]);
     const [todayTasks, setTodayTasks] = React.useState([]);
-    /*const [todayTasks, setTodayTasks] = React.useState(
-        [
-            {
-                id: 1,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 2,
-                name: "asd2",
-                description: "ddd2",
-                status: 2,
-            },
-            {
-                id: 3,
-                name: "asd",
-                description: "ddd",
-                status: 3,
-            },
-            {
-                id: 4,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 5,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 6,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 7,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 8,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 9,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 10,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 11,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-            {
-                id: 12,
-                name: "asd",
-                description: "ddd",
-                status: 1,
-            },
-        ]
-    );*/
 
     const handleCompleteTask = (taskId) => {
         completeTask(taskId);
@@ -217,17 +141,17 @@ export default function Today({ hidden }) {
                         todayTasks.map((task) => (
                         <Paper elevation={1} key={task.id} sx={{ mb: 1 }}>
                         <ListItem   
-                                sx={{
-                                    backgroundColor:
-                                        task.status === 1 ? '#dceef3' :
-                                        task.status === 2 ? '#ffc6c6' : 
-                                        '#ccedcc'
-                                }}
+                            sx={{
+                                backgroundColor:
+                                    task.status === 0 ? '#dceef3' :
+                                    task.status === 1 ? '#ffc6c6' : 
+                                    '#ccedcc'
+                            }}
                         >
                             <ListItemIcon sx={{ justifyContent: 'center' }}>
                                 <Checkbox
                                     edge="start"
-                                    checked={task.status == 3}
+                                    checked={task.status == 2}
                                     icon={<PanoramaFishEyeIcon fontSize='medium' />}
                                     checkedIcon={<CheckCircleIcon fontSize='medium' />}
                                     onClick={() => handleCompleteTask(task.id)}
@@ -236,8 +160,8 @@ export default function Today({ hidden }) {
                             <ListItemButton>
                                 <ListItemText
                                     sx={{
-                                        textDecorationLine: task.status == 3 ? 'line-through' : null,
-                                        textDecorationStyle: task.status == 3 ? 'solid' : null,
+                                        textDecorationLine: task.status == 2 ? 'line-through' : null,
+                                        textDecorationStyle: task.status == 2 ? 'solid' : null,
                                         my: 0
                                     }}
                                     primary={task.name}
