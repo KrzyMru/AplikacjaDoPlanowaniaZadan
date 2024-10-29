@@ -49,8 +49,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server
 
             app.MapFallbackToFile("/index.html");
 
-            app.UseCors("CorsPolicy");
-
             app.Run();
         }
     }

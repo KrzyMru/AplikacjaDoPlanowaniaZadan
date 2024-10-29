@@ -2,8 +2,9 @@ import React from "react";
 import { Box, Grid, Typography, Paper } from '@mui/material';
 import SideBar from "../components/SideBar";
 import Button from '@mui/material/Button';
-import Today from "../components/Today";
-import Calendar from "../components/Calendar";
+import Today from "../components/screens/Today";
+import Calendar from "../components/screens/Calendar";
+import TaskList from "../components/screens/TaskList";
 
 const Home = () => {
     const [selected, setSelected] = React.useState("Today");
@@ -29,6 +30,7 @@ const Home = () => {
                     <Box sx={{ flexGrow: 1 }}>
                         <Today hidden={selected !== "Today"} />
                         <Calendar hidden={selected !== "Calendar"} />
+                        <TaskList hidden={isNaN(+selected)} listId={+selected} />
                     </Box>
                 </Paper>
             </Grid>
