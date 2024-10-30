@@ -1,4 +1,7 @@
 
+using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
+using Microsoft.EntityFrameworkCore;
+
 namespace AplikacjaDoPlanowaniaZadan.Server
 {
     public class Program
@@ -8,6 +11,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
