@@ -2,19 +2,10 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Divider from '@mui/material/Divider';
-import { Paper, CircularProgress, Skeleton } from '@mui/material';
+import { Paper } from '@mui/material';
 import Task from '../Task';
+import TaskListSkeleton from '../skeletons/TaskListSkeleton';
 
 export default function Today({ hidden }) {
 
@@ -112,23 +103,7 @@ export default function Today({ hidden }) {
                 >
                     {
                         loadingList ?
-                        <React.Fragment >
-                            <ListItem>
-                                <Skeleton height={96} width={'100%'} />
-                            </ListItem>
-                            <ListItem>
-                                <Skeleton height={96} width={'100%'} />
-                            </ListItem>
-                            <ListItem>
-                                <Skeleton height={96} width={'100%'} />
-                            </ListItem>
-                            <ListItem>
-                                <Skeleton height={96} width={'100%'} />
-                            </ListItem>
-                            <ListItem>
-                                <Skeleton height={96} width={'100%'} />
-                            </ListItem>
-                        </React.Fragment>
+                        <TaskListSkeleton />
                         :
                         (!todayTasks || todayTasks.length === 0) ?
                         <Typography variant="body1" align="center" flexGrow="1">
@@ -141,6 +116,7 @@ export default function Today({ hidden }) {
                                 task={task}
                                 toggleTask={toggleTask}
                                 deleteTask={deleteTask}
+                                loadingAction={loadingAction}
                             />
                         </Paper>
                     ))}

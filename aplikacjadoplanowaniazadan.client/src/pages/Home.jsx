@@ -21,8 +21,8 @@ const Home = () => {
                         borderRadius: { xs: 0, sm: '20px' },
                         display: 'flex', flexDirection: 'row',
                         flexGrow: 1, overflow: 'hidden',  
-                        mx: { xs: 0, sm: "6rem", lg: "8rem" },
-                        my: { xs: 0, sm: "4rem", lg: "6rem" },
+                        mx: { xs: 0, sm: "5rem", lg: "8rem" },
+                        my: { xs: 0, sm: "3rem", lg: "6rem" },
                         maxWidth: 'lg', maxHeight: 'lg',
                     }}
                 >
