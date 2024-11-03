@@ -36,17 +36,17 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpGet("getTaskList")]
         public IActionResult getTaskList([FromQuery] int listId)
         {
-            // Użyj LINQ do przefiltrowania listy według Id
+            
             var list = _context.Lists.FirstOrDefault(l => l.Id == listId);
 
 
             if (list == null)
             {
                 Console.WriteLine("HAHA - Nie znaleziono listy o podanym Id.");
-                return NotFound(); // Możesz zwrócić 404, jeśli lista nie istnieje
+                return NotFound();
             }
 
-            return Ok(list); // Zwróć 200 z danymi
+            return Ok(list); 
         }
 
 
