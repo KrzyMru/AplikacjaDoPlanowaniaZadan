@@ -23,48 +23,17 @@ export default function TaskList({ hidden, listId, setSelected }) {
     const getTaskList = async (listId) => {
         setLoadingList(true);
         try {
-            const response = await fetch(`http://localhost:5141/api/list/getTaskList?listId=${listId}`, {
-                method: "GET",
+            const response = await fetch("http://localhost:5141/api/list/getTaskList", {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify(listId),
             });
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
             setTaskList(data);
-            /*setTaskList(
-                {
-                    id: 0,
-                    name: 'List name',
-                    description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. A'+
-                    'enean commodo ligula eget dolor.Aenean massa.Cum sociis natoque penatibus et magnis dis p'+
-                    'arturient montes, nascetur ridiculus mus.Donec quam felis, ultricies nec, pellentesque eu, preti'+
-                    'um quis, sem.Nulla consequat massa quis enim.Donec pede justo, fringilla vel, aliquet nec, vulputate eget'+
-                    ', arcu.In enim justo, rhoncus ut, ',
-                    color: 'aqua',
-                    tasks: [
-                        {
-                            id: 0,
-                            name: "Task 1",
-                            description: 'desc',
-                            status: 0,
-                        },
-                        {
-                            id: 1,
-                            name: "Task 2",
-                            description: 'desc2',
-                            status: 1,
-                        },
-                        {
-                            id: 2,
-                            name: "Task 3",
-                            description: 'desc3',
-                            status: 2,
-                        },
-                    ]
-                },
-            );*/
         }
         catch (error) { }
         finally {

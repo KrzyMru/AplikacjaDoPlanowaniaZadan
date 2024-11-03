@@ -27,22 +27,19 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 return BadRequest("List data is invalid.");
             }
 
-           
+           // Tu poprawka, lista zwracana jest zła, głównie jej id.
             _context.Database.ExecuteSqlRaw("INSERT INTO Lists (Name, Description, Color) VALUES ({0}, {1}, {2})", list.Name, list.Description, list.Color);
             return CreatedAtAction(nameof(getTaskList), new { id = list.Id }, list);
         }
 
 
-        [HttpGet("getTaskList")]
-        public IActionResult getTaskList([FromQuery] int listId)
+        [HttpPost("getTaskList")]
+        public IActionResult getTaskList([FromBody] int listId)
         {
-            
             var list = _context.Lists.FirstOrDefault(l => l.Id == listId);
-
 
             if (list == null)
             {
-                Console.WriteLine("HAHA - Nie znaleziono listy o podanym Id.");
                 return NotFound();
             }
 
