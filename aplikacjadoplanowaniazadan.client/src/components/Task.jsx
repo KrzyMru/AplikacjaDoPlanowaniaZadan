@@ -83,11 +83,11 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
                     <Box sx={{ position: 'relative' }}>
                         <IconButton edge="end"
                             onClick={() => handleDeleteTask(task?.id)}
-                            disabled={loadingAction.find(tid => tid === task?.id) !== undefined}
+                            disabled={loadingAction?.find(tid => tid === task?.id) !== undefined}
                         >
                             <DeleteIcon />
                         </IconButton>
-                        {loadingAction.find(tid => tid === task?.id) !== undefined && (
+                        {loadingAction?.find(tid => tid === task?.id) !== undefined && (
                             <CircularProgress
                                 size={24}
                                 sx={{

@@ -1,14 +1,17 @@
 import React from "react";
 import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
-import { MuiColorInput } from "mui-color-input";
 
-const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
+const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
 
-    const saveList = async (formData) => {
+    const [formData, setFormData] = React.useState();
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    const saveTask = async (formData) => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:5141/api/list/saveList", {
+            const response = await fetch("http://localhost:5141/api/task/saveTask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -18,21 +21,18 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTaskListHeaders([data, ...taskListHeaders]);
+            setTaskList({ ...taskList, tasks: [data, ...taskList.tasks] });
             onClose();
         } catch (error) {
             setError("Something went wrong.");
-        } finally {
+        }
+        finally {
             setLoading(false);
         }
     }
 
-    const [formData, setFormData] = React.useState({color: '#FFFACD'});
-    const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState(null);
-
-    const handleCreateList = (formData) => {
-        saveList(formData);
+    const handleCreateTask = (formData) => {
+        saveTask({ ...formData, listId: taskList?.id });
     }
 
     return (
@@ -44,9 +44,9 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
         >
             <DialogTitle>
                 <div>
-                <Typography variant="h4" align="center">
-                    Create list
-                </Typography>
+                    <Typography variant="h4" align="center">
+                        Create task
+                    </Typography>
                 </div>
             </DialogTitle>
             <Divider />
@@ -66,11 +66,6 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
                 />
-                <MuiColorInput name="color" format="hex" value={formData?.color} label="Color"
-                    onChange={(value) => {
-                        setFormData((prev) => ({ ...prev, color: value }))
-                    }}
-                />
                 {error &&
                     <Alert severity="error" sx={{ mt: 3 }}>
                         {error}
@@ -82,7 +77,7 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
                     <Button
                         variant="contained"
                         endIcon={<SaveIcon />}
-                        onClick={() => handleCreateList(formData)}
+                        onClick={() => handleCreateTask(formData)}
                         disabled={loading}
                     >
                         Save
@@ -105,4 +100,4 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
     );
 };
 
-export default CreateList;
+export default CreateTask;

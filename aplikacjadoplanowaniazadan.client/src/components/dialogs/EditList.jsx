@@ -3,12 +3,12 @@ import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextFi
 import SaveIcon from '@mui/icons-material/Save';
 import { MuiColorInput } from "mui-color-input";
 
-const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
+const EditList = ({ open, onClose, taskList, setTaskList }) => {
 
-    const saveList = async (formData) => {
+    const editList = async (formData) => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:5141/api/list/saveList", {
+            const response = await fetch("http://localhost:5141/api/list/editList", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -18,7 +18,8 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTaskListHeaders([data, ...taskListHeaders]);
+            setTaskList(data);
+            //setTaskList({ ...taskList, ...formData });
             onClose();
         } catch (error) {
             setError("Something went wrong.");
@@ -27,12 +28,12 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
         }
     }
 
-    const [formData, setFormData] = React.useState({color: '#FFFACD'});
+    const [formData, setFormData] = React.useState(taskList);
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
-    const handleCreateList = (formData) => {
-        saveList(formData);
+    const handleEditList = (formData) => {
+        editList(formData);
     }
 
     return (
@@ -44,14 +45,15 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
         >
             <DialogTitle>
                 <div>
-                <Typography variant="h4" align="center">
-                    Create list
-                </Typography>
+                    <Typography variant="h4" align="center">
+                        Edit list
+                    </Typography>
                 </div>
             </DialogTitle>
             <Divider />
             <DialogContent>
                 <TextField name="name" label="Name" variant="outlined"
+                    defaultValue={formData?.name}
                     fullWidth sx={{ mb: 2, mt: 2 }}
                     onChange={(event) => {
                         const { name, value } = event.target;
@@ -59,6 +61,7 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
                     }}
                 />
                 <TextField name="description" label="Description" variant="outlined"
+                    defaultValue={formData?.description}
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}
                     onChange={(event) => {
@@ -82,7 +85,7 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
                     <Button
                         variant="contained"
                         endIcon={<SaveIcon />}
-                        onClick={() => handleCreateList(formData)}
+                        onClick={() => handleEditList(formData)}
                         disabled={loading}
                     >
                         Save
@@ -105,4 +108,4 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
     );
 };
 
-export default CreateList;
+export default EditList;

@@ -33,7 +33,21 @@ export default function SideBar({ handleSelect }) {
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTaskLists(data);
+            setTaskListHeaders(data);
+            /*setTaskListHeaders(
+                [
+                    {
+                        id: 0,
+                        name: 'List name',
+                        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. A' +
+                            'enean commodo ligula eget dolor.Aenean massa.Cum sociis natoque penatibus et magnis dis p' +
+                            'arturient montes, nascetur ridiculus mus.Donec quam felis, ultricies nec, pellentesque eu, preti' +
+                            'um quis, sem.Nulla consequat massa quis enim.Donec pede justo, fringilla vel, aliquet nec, vulputate eget' +
+                            ', arcu.In enim justo, rhoncus ut, ',
+                        color: 'aqua',
+                    },
+                ]
+            );*/
         }
         catch (error) { }
         finally {

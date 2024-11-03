@@ -30,7 +30,7 @@ const Home = () => {
                     <Box sx={{ flexGrow: 1 }}>
                         <Today hidden={selected !== "Today"} />
                         <Calendar hidden={selected !== "Calendar"} />
-                        <TaskList hidden={isNaN(+selected)} listId={+selected} />
+                        <TaskList hidden={isNaN(+selected)} listId={+selected} setSelected={setSelected} />
                     </Box>
                 </Paper>
             </Grid>
