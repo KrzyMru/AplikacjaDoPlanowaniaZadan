@@ -23,7 +23,7 @@ export default function TaskList({ hidden, listId, setSelected }) {
     const getTaskList = async (listId) => {
         setLoadingList(true);
         try {
-            const response = await fetch("http://localhost:5141/api/list/getTaskList", {
+            const response = await fetch(`http://localhost:5141/api/list/getTaskList?listId=${listId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -118,7 +118,7 @@ export default function TaskList({ hidden, listId, setSelected }) {
         setLoadingListAction(true);
         try {
             const response = await fetch("http://localhost:5141/api/list/deleteList", {
-                method: "POST",
+                method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },

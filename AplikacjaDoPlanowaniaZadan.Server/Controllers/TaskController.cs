@@ -25,32 +25,72 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             return Ok(todayTasks);
         }
 
-        [HttpDelete("deleteTask")]
-        public IActionResult DeleteTask([FromBody] int taskId)
+      
+        [HttpPost("saveTask")]
+        public IActionResult SaveTask([FromBody] DataModels.Task task)
         {
-            var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
-            if (task == null)
+            if (task == null || string.IsNullOrEmpty(task.Name) || string.IsNullOrEmpty(task.Description))
             {
-                return NotFound();
+                return BadRequest("Dane zadania są niepoprawne.");
             }
 
-            _context.Tasks.Remove(task);
-            _context.SaveChanges();
-            return NoContent();
+            try
+            {
+              
+                task.Status = Status.Planned;        
+                task.Priority = Priority.Medium;     
+                task.DueTo = DateTime.Now.AddDays(7); 
+
+                _context.Tasks.Add(task);
+                _context.SaveChanges();
+
+                return CreatedAtAction(nameof(SaveTask), new { id = task.Id }, task);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd podczas zapisywania zadania: " + ex.Message);
+                return StatusCode(500, "Wystąpił błąd podczas zapisywania zadania.");
+            }
         }
 
-        [HttpPost("completeTask")]
-        public IActionResult CompleteTask([FromBody] int taskId)
+     
+        [HttpPost("toggleTask")]
+        public IActionResult ToggleTask([FromBody] int taskId)
         {
             var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
             if (task == null)
             {
-                return NotFound();
+                return NotFound("Zadanie nie zostało znalezione.");
             }
 
-            task.Status = Status.Finished;
-            _context.SaveChanges();
-            return Ok(task);
+            try
+            {
+               
+                switch (task.Status)
+                {
+                    case Status.Finished:
+                        task.Status = Status.Planned;
+                        task.DueTo = default; 
+                        break;
+
+                    case Status.Planned:
+                    case Status.During:
+                        task.Status = Status.Finished;
+                        task.DueTo = DateTime.Now; 
+                        break;
+
+                    default:
+                        return BadRequest("Nieznany status zadania.");
+                }
+
+                _context.SaveChanges();
+                return Ok(task);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Błąd podczas przełączania statusu zadania: " + ex.Message);
+                return StatusCode(500, "Wystąpił błąd podczas aktualizacji zadania.");
+            }
         }
     }
 }
