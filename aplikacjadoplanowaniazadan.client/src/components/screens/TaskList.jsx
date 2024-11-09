@@ -139,7 +139,7 @@ export default function TaskList({ hidden, listId, setSelected }) {
                 <Typography variant='h5' align='center'
                     sx={{ py: 3, px: 6, backgroundColor: taskList?.color }}
                 >
-                    {taskList?.name}
+                    {loadingList ? <LinearProgress sx={{ p: '2px', m: '12px' }} /> : taskList?.name}
                 </Typography>
                 <Divider variant="middle" />
                 <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
@@ -171,9 +171,9 @@ export default function TaskList({ hidden, listId, setSelected }) {
                             loadingList ?
                             <TaskListSkeleton />
                             :
-                            (!taskList || taskList.length === 0) ?
+                            (!taskList?.tasks || taskList?.tasks?.length === 0) ?
                             <Typography variant="body1" align="center" flexGrow="1">
-                                Empty...
+                                This list contains no tasks yet
                             </Typography>
                             :
                             taskList?.tasks?.map((task) => (

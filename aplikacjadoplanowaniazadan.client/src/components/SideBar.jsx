@@ -15,6 +15,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CreateList from './dialogs/CreateList';
 import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TaskListHeaderSkeleton from './skeletons/TaskListHeaderSkeleton';
 
 export default function SideBar({ handleSelect }) {
 
@@ -23,6 +24,7 @@ export default function SideBar({ handleSelect }) {
     }, []);
 
     const getTaskListHeaders = async () => {
+        setLoading(true);
         try {
             const response = await fetch("http://localhost:5141/api/list/getTaskListHeaders", {
                 method: "GET",
@@ -34,27 +36,15 @@ export default function SideBar({ handleSelect }) {
                 throw Error(response?.status);
             const data = await response.json();
             setTaskListHeaders(data);
-            /*setTaskListHeaders(
-                [
-                    {
-                        id: 0,
-                        name: 'List name',
-                        description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. A' +
-                            'enean commodo ligula eget dolor.Aenean massa.Cum sociis natoque penatibus et magnis dis p' +
-                            'arturient montes, nascetur ridiculus mus.Donec quam felis, ultricies nec, pellentesque eu, preti' +
-                            'um quis, sem.Nulla consequat massa quis enim.Donec pede justo, fringilla vel, aliquet nec, vulputate eget' +
-                            ', arcu.In enim justo, rhoncus ut, ',
-                        color: 'aqua',
-                    },
-                ]
-            );*/
         }
         catch (error) { }
         finally {
+            setLoading(false);
         }
     }
 
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
     const [openCreateList, setOpenCreateList] = React.useState(false);
     const [taskListHeaders, setTaskListHeaders] = React.useState([]);
 
@@ -108,41 +98,45 @@ export default function SideBar({ handleSelect }) {
                 </Box>
                 <Divider />
                 <List>
-                    {screens?.map((screen) => (
-                        <ListItem key={screen?.name} disablePadding sx={{ display: 'block' }}
-                            onClick={() => handleSelect(screen?.name)}
-                        >
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    px: 2.5,
-                                    width: open ? null : 'fit-content',
-                                    justifyContent: open ? 'initial' : 'center',
-                                }}
+                    {
+                        screens?.map((screen) => (
+                            <ListItem key={screen?.name} disablePadding sx={{ display: 'block' }}
+                                onClick={() => handleSelect(screen?.name)}
                             >
-                                <ListItemIcon
+                                <ListItemButton
                                     sx={{
-                                        minWidth: 0,
-                                        justifyContent: 'center',
-                                        mr: open ? 3 : 'auto'
+                                        minHeight: 48,
+                                        px: 2.5,
+                                        width: open ? null : 'fit-content',
+                                        justifyContent: open ? 'initial' : 'center',
                                     }}
                                 >
-                                    {screen?.icon}
-                                </ListItemIcon>
-                                {
-                                    open &&
-                                    <ListItemText
-                                        primary={screen?.name}
-                                    />
-                                }
-                            </ListItemButton>
-                        </ListItem>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            justifyContent: 'center',
+                                            mr: open ? 3 : 'auto'
+                                        }}
+                                    >
+                                        {screen?.icon}
+                                    </ListItemIcon>
+                                    {
+                                        open &&
+                                        <ListItemText
+                                            primary={screen?.name}
+                                        />
+                                    }
+                                </ListItemButton>
+                            </ListItem>
                     ))}
                 </List>
                 <Divider />
                 <Box sx={{ overflowY: 'hidden', flexGrow: 1, position: 'relative' }}>
                     <ListItem key={"CreateList"} disablePadding
-                        sx={{ display: 'block' }}
+                        sx={{
+                            display: 'block',
+                            borderBottom: '0.5px solid', borderColor: 'divider',
+                        }}
                         onClick={() => handleOpenCreateList()}
                     >
                         <ListItemButton
@@ -177,43 +171,47 @@ export default function SideBar({ handleSelect }) {
                             width: '-webkit-fill-available',
                         }}
                     >
-                        {taskListHeaders?.map((list) => (
-                            <ListItem key={list?.id} disablePadding
-                                sx={{ display: 'block', backgroundColor: list?.color }}
-                                onClick={() => handleSelect(list?.id)}
-                            >
-                                <ListItemButton
-                                    sx={{
-                                        minHeight: 48,
-                                        px: 2.5,
-                                        width: open ? 200 : 'fit-content',
-                                        justifyContent: open ? 'initial' : 'center',
-                                    }}
+                        {
+                            loading ?
+                                <TaskListHeaderSkeleton />
+                            :
+                            taskListHeaders?.map((list) => (
+                                <ListItem key={list?.id} disablePadding
+                                    sx={{ display: 'block', backgroundColor: list?.color }}
+                                    onClick={() => handleSelect(list?.id)}
                                 >
-                                    <ListItemIcon
+                                    <ListItemButton
                                         sx={{
-                                            minWidth: 0,
-                                            justifyContent: 'center',
-                                            mr: open ? 3 : 'auto'
+                                            minHeight: 48,
+                                            px: 2.5,
+                                            width: open ? 200 : 'fit-content',
+                                            justifyContent: open ? 'initial' : 'center',
                                         }}
                                     >
-                                        <ListIcon />
-                                        {/*{list?.icon}*/}
-                                    </ListItemIcon>
-                                    {
-                                        open &&
-                                        <ListItemText
+                                        <ListItemIcon
                                             sx={{
-                                                overflow: 'hidden',
-                                                display: '-webkit-box',
-                                                WebkitBoxOrient: 'vertical',                                          
-                                                WebkitLineClamp: '1',
+                                                minWidth: 0,
+                                                justifyContent: 'center',
+                                                mr: open ? 3 : 'auto'
                                             }}
-                                            primary={list?.name}
-                                        />
-                                    }
-                                </ListItemButton>
-                            </ListItem>
+                                        >
+                                            <ListIcon />
+                                            {/*{list?.icon}*/}
+                                        </ListItemIcon>
+                                        {
+                                            open &&
+                                            <ListItemText
+                                                sx={{
+                                                    overflow: 'hidden',
+                                                    display: '-webkit-box',
+                                                    WebkitBoxOrient: 'vertical',                                          
+                                                    WebkitLineClamp: '1',
+                                                }}
+                                                primary={list?.name}
+                                            />
+                                        }
+                                    </ListItemButton>
+                                </ListItem>
                         ))}
                     </List>
                 </Box>

@@ -17,6 +17,7 @@
     "@emotion/styled": "11.10.4",
     "@mui/material": "5.9.3",
     "@mui/icons-material": "5.16.7",
+    "@mui/x-date-pickers": "6.20.2",
     "mui-color-input": "2.0.3",
     "dayjs": "1.11.13"
   },

@@ -107,7 +107,7 @@ export default function Today({ hidden }) {
                         :
                         (!todayTasks || todayTasks.length === 0) ?
                         <Typography variant="body1" align="center" flexGrow="1">
-                            Empty...
+                            There are no tasks due today
                         </Typography>
                         :
                         todayTasks.map((task) => (

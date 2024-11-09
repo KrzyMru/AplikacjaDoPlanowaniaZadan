@@ -1,6 +1,9 @@
 import React from "react";
 import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import 'dayjs/locale/en-gb';
 
 const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
 
@@ -10,13 +13,15 @@ const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
 
     const saveTask = async (formData) => {
         setLoading(true);
+        // To jest wysy³ane do saveTask
+        console.log({ ...formData, dueTo: formData?.dueTo?.format("YYYY-MM-DD HH:mm:ss") });
         try {
             const response = await fetch("http://localhost:5141/api/task/saveTask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, dueTo: formData?.dueTo?.format("YYYY-MM-DD HH:mm:ss") }),
             });
             if (!response.ok)
                 throw Error(response?.status);
@@ -66,6 +71,16 @@ const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
                 />
+                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+                    <DateTimePicker name="dueTo" label="Due to"
+                        sx={{ width: "100%", mb: 2 }}
+                        disablePast
+                        defaultValue={formData?.dueTo}
+                        onChange={(newValue) => {
+                            setFormData({ ...formData, dueTo: newValue });
+                        }}
+                    />
+                </LocalizationProvider>
                 {error &&
                     <Alert severity="error" sx={{ mt: 3 }}>
                         {error}

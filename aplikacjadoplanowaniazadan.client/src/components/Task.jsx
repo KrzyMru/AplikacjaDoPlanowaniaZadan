@@ -68,7 +68,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
                     />
                 </ListItemButton>
                 <Divider flexItem orientation="vertical" sx={{ mx: 1, display: { xs: "none", sm: "block" } }} />
-                <Box sx={{ display: { xs: "none", sm: "flex" }, flexDirection: 'column', p: 1 }}>
+                <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1 }}>
                     <Typography variant="overline" align="center">
                         {"Due"}
                     </Typography>
