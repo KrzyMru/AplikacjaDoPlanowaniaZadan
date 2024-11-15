@@ -27,8 +27,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 return BadRequest("List data is invalid.");
             }
 
-           // Tu poprawka, lista zwracana jest zła, głównie jej id.
-            _context.Database.ExecuteSqlRaw("INSERT INTO Lists (Name, Description, Color) VALUES ({0}, {1}, {2})", list.Name, list.Description, list.Color);
+            _context.Lists.Add(list);
+            _context.SaveChanges();
             return CreatedAtAction(nameof(getTaskList), new { id = list.Id }, list);
         }
 
@@ -42,6 +42,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             {
                 return NotFound();
             }
+
+            //var tasks = _context.Tasks.Where(t => t.Id == listId).ToList();
 
             return Ok(list); 
         }
@@ -62,5 +64,51 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
             return Ok(listHeaders);
         }
+
+        [HttpPost("editList")]
+        public IActionResult editList([FromBody] List updatedList)
+        {
+            if (updatedList == null || updatedList.Id <= 0)
+            {
+                return BadRequest("List data is invalid.");
+            }
+
+            var existingList = _context.Lists.FirstOrDefault(l => l.Id == updatedList.Id);
+
+            if (existingList == null)
+            {
+                return NotFound("List not found.");
+            }
+
+            existingList.Name = updatedList.Name;
+            existingList.Description = updatedList.Description;
+            existingList.Color = updatedList.Color;
+
+            _context.SaveChanges();
+            return Ok(existingList);
+        }
+
+        [HttpDelete("deleteList")]
+        public IActionResult deleteList([FromBody] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid list ID.");
+            }
+
+            var list = _context.Lists.FirstOrDefault(l => l.Id == id);
+
+            if (list == null)
+            {
+                return NotFound("List not found.");
+            }
+
+            _context.Lists.Remove(list);
+            _context.SaveChanges();
+
+            return Ok(new { success = true, message = "List deleted successfully." });
+        }
+
+
     }
 }
