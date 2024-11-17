@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import EditList from '../dialogs/EditList';
 
-export default function TaskList({ hidden, listId, setSelected }) {
+export default function TaskList({ hidden, listId, setSelected, taskListHeaders, setTaskListHeaders }) {
 
     React.useEffect(() => {
         if (!hidden)
@@ -96,10 +96,26 @@ export default function TaskList({ hidden, listId, setSelected }) {
             if (!response.ok)
                 throw Error(response?.status);
             setSelected("Today");
+            setTaskListHeaders(taskListHeaders?.filter(tsklst => tsklst?.id !== listId));
         } catch (error) { }
         finally {
             setLoadingListAction(false);
         }
+    }
+
+    const editList = async (formData) => {
+        const response = await fetch("http://localhost:5141/api/list/editList", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+        if (!response.ok)
+            throw Error(response?.status);
+        const data = await response.json();
+        setTaskList(data);
+        setTaskListHeaders(taskListHeaders.map(tlh => tlh?.id === data?.id ? { ...tlh, name: data?.name, color: data?.color } : tlh));
     }
 
     const [loadingList, setLoadingList] = React.useState(false);
@@ -202,7 +218,7 @@ export default function TaskList({ hidden, listId, setSelected }) {
                 open={openEditList}
                 onClose={handleCloseEditList}
                 taskList={taskList}
-                setTaskList={setTaskList}
+                editList={editList}
             />
         </React.Fragment>
     );

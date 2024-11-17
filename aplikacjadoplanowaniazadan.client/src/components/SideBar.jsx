@@ -17,7 +17,7 @@ import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskListHeaderSkeleton from './skeletons/TaskListHeaderSkeleton';
 
-export default function SideBar({ handleSelect }) {
+export default function SideBar({ handleSelect, taskListHeaders, setTaskListHeaders }) {
 
     React.useEffect(() => {
         getTaskListHeaders();
@@ -46,7 +46,6 @@ export default function SideBar({ handleSelect }) {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [openCreateList, setOpenCreateList] = React.useState(false);
-    const [taskListHeaders, setTaskListHeaders] = React.useState([]);
 
     const handleOpen = () => {
         setOpen(true);

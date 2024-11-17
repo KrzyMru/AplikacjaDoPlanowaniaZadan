@@ -8,6 +8,7 @@ import TaskList from "../components/screens/TaskList";
 
 const Home = () => {
     const [selected, setSelected] = React.useState("Today");
+    const [taskListHeaders, setTaskListHeaders] = React.useState([]);
 
     const handleSelect = (newSelection) => {
         setSelected(newSelection)
@@ -26,11 +27,20 @@ const Home = () => {
                         maxWidth: 'lg', maxHeight: 'lg',
                     }}
                 >
-                    <SideBar handleSelect={handleSelect} />
+                    <SideBar
+                        handleSelect={handleSelect}
+                        taskListHeaders={taskListHeaders}
+                        setTaskListHeaders={setTaskListHeaders}
+                    />
                     <Box sx={{ flexGrow: 1 }}>
                         <Today hidden={selected !== "Today"} />
                         <Calendar hidden={selected !== "Calendar"} />
-                        <TaskList hidden={isNaN(+selected)} listId={+selected} setSelected={setSelected} />
+                        <TaskList hidden={isNaN(+selected)}
+                            listId={+selected}
+                            setSelected={setSelected}
+                            taskListHeaders={taskListHeaders}
+                            setTaskListHeaders={setTaskListHeaders}
+                        />
                     </Box>
                 </Paper>
             </Grid>
