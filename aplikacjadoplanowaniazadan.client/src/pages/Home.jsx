@@ -6,7 +6,7 @@ import Today from "../components/screens/Today";
 import Calendar from "../components/screens/Calendar";
 import TaskList from "../components/screens/TaskList";
 
-const Home = () => {
+const Home = ({ token }) => {
     const [selected, setSelected] = React.useState("Today");
     const [taskListHeaders, setTaskListHeaders] = React.useState([]);
 

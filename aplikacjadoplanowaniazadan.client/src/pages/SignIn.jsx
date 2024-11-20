@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import { useFormik } from 'formik';
 
-const SignIn = () => {
+const SignIn = ({ setToken }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -22,6 +22,12 @@ const SignIn = () => {
 
         if (!values.password) {
             errors.password = 'Required';
+        } else if (values.password.length > 0 && values.password[0] !== values.password[0].toUpperCase()) {
+            errors.password = 'Password must start with capital letter.';
+        } else if (/^[a-zA-Z0-9]+$/?.test(values.password)) {
+            errors.password = 'Password must contain at least one non-alphanumeric character.';
+        } else if (!/\d/?.test(values.password)) {
+            errors.password = 'Password must contain at least one digit.';
         } else if (values.password.length < 8) {
             errors.password = 'Password must be at least 8 characters long.';
         }
@@ -40,19 +46,20 @@ const SignIn = () => {
             try {
                 setLoading(true);
                 setError(null);
-                /*const response = await fetch("http://localhost:5141/login", {
+                const response = await fetch("https://localhost:7241/login?useCookies=true", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ username: values?.email, password: values?.password }),
+                    body: JSON.stringify(values),
                 });
-                if (response.ok) {
+                if (response.ok) {  
                     const data = await response.json();
+                    setToken(data?.accessToken);
+                    window.location.href = "/";
                 }
                 else
-                    setError("Something went wrong, please try again later.");*/
-                console.log(values);
+                    setError("Something went wrong, please try again later.");
             } catch (error) {
                 setError("Something went wrong, please try again later.");
             } finally {
@@ -124,7 +131,7 @@ const SignIn = () => {
                         </FormControl>
                         {
                             error &&
-                            <Alert severity="error" sx={{ mb: 1, width: '100%' }}>
+                            <Alert severity="error" sx={{ mb: 1 }}>
                                 {error}
                             </Alert>
                         }
@@ -137,6 +144,7 @@ const SignIn = () => {
                                     px: 5
                                 }}
                                 disabled={
+                                    loading ||
                                     formik.errors.email !== undefined ||
                                     formik.errors.password !== undefined
                                 }

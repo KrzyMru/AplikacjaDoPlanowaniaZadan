@@ -37,7 +37,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             });
 
             builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+            builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.ApplicationScheme);
             builder.Services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddApiEndpoints();
