@@ -1,10 +1,12 @@
 ﻿using AplikacjaDoPlanowaniaZadan.Server.DataModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.DAL.EF
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public DbSet<DataModels.Task> Tasks { get; set; }
         public DbSet<DataModels.List> Lists { get; set; }
