@@ -4,10 +4,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import 'dayjs/locale/en-gb';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
 
-    const [formData, setFormData] = React.useState();
+    const [formData, setFormData] = React.useState({priority: 1});
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
@@ -79,8 +83,23 @@ const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
                         onChange={(newValue) => {
                             setFormData({ ...formData, dueTo: newValue });
                         }}
+                        slotProps={{ field: { clearable: true } }}
                     />
                 </LocalizationProvider>
+                <FormControl fullWidth>
+                    <InputLabel>Priority</InputLabel>
+                    <Select
+                        value={formData?.priority}
+                        label="Priority"
+                        onChange={(event) => {
+                            setFormData({ ...formData, priority: event.target.value });
+                        }}
+                    >
+                        <MenuItem value={0}>Low</MenuItem>
+                        <MenuItem value={1}>Medium</MenuItem>
+                        <MenuItem value={2}>High</MenuItem>
+                    </Select>
+                </FormControl>
                 {error &&
                     <Alert severity="error" sx={{ mt: 3 }}>
                         {error}

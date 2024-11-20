@@ -192,7 +192,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
                                 This list contains no tasks yet
                             </Typography>
                             :
-                            taskList?.tasks?.map((task) => (
+                            taskList?.tasks?.sort((t1, t2) => t2?.priority - t1?.priority)?.map((task) => (
                             <Paper elevation={1} key={task.id} sx={{ mb: 1 }}>
                                 <Task
                                     task={task}

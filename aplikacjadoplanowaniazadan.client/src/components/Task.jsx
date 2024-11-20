@@ -13,7 +13,9 @@ import PanoramaFishEyeIcon from '@mui/icons-material/PanoramaFishEye';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Divider from '@mui/material/Divider';
 import { CircularProgress } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import TaskInfo from './dialogs/TaskInfo';
+import FlagIcon from '@mui/icons-material/Flag';
 
 export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
 
@@ -36,6 +38,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
         <React.Fragment>
             <ListItem
                 sx={{
+                    position: 'relative',
                     minHeight: 96, maxHeight: 96,
                     backgroundColor:
                         task?.status === 0 ? '#dceef3' :
@@ -43,6 +46,17 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
                         '#ccedcc'
                 }}
             >
+                <Tooltip title={(task?.priority === 0 ? "Low" : task?.priority === 1 ? "Medium" : "High") + " priority"}>
+                    <FlagIcon
+                        sx={{
+                            position: 'absolute', left: 0, top: 0,
+                            color: 
+                                task?.priority === 0 ? 'green' :
+                                task?.priority === 1 ? 'yellow' :
+                                    'red'
+                        }}
+                    />
+                </Tooltip>
                 <ListItemIcon sx={{ justifyContent: 'center' }}>
                     <Checkbox
                         edge="start"

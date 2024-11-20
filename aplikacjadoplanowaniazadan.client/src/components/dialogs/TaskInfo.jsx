@@ -1,6 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogTitle, Divider, Typography, Box } from "@mui/material";
 import dayjs from "dayjs";
+import FlagIcon from '@mui/icons-material/Flag';
 
 const GetDaysFromSeconds = (seconds) => {
     return Math.floor(seconds / 86400) + " Days"
@@ -43,9 +44,21 @@ const TaskInfo = ({ open, onClose, task }) => {
             </DialogTitle>
             <Divider />
             <DialogContent>
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <FlagIcon
+                        sx={{
+                            mb: '20px',
+                            color:
+                                task?.priority === 0 ? 'green' :
+                                task?.priority === 1 ? 'yellow' :
+                                    'red'
+                        }}
+                    />
+                    <Typography>{(task?.priority === 0 ? "Low" : task?.priority === 1 ? "Medium" : "High") + " priority"}</Typography>
+                </Box>
                 <Box
                     sx={{
-                        display: 'flex',
+                        display: task?.dueTo ? 'flex' : 'none',
                         justifyContent: 'space-around',
                         mb: '20px',
                         backgroundColor:
