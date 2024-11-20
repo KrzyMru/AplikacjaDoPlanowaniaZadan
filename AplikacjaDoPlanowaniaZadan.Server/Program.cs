@@ -1,5 +1,7 @@
 
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
+using AplikacjaDoPlanowaniaZadan.Server.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AplikacjaDoPlanowaniaZadan.Server
@@ -34,6 +36,11 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             });
             });
 
+            builder.Services.AddAuthorization();
+            builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+            builder.Services.AddIdentityCore<IdentityUser>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddApiEndpoints();
             var app = builder.Build();
 
             app.UseCors("default");
@@ -45,13 +52,13 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+
+                app.ApplyMigrations();
             }
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
-
+            app.MapIdentityApi<IdentityUser>();
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
