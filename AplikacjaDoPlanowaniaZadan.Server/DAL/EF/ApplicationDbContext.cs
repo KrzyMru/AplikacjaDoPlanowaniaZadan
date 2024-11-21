@@ -6,7 +6,7 @@ using System;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.DAL.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<DataModels.Task> Tasks { get; set; }
         public DbSet<DataModels.List> Lists { get; set; }

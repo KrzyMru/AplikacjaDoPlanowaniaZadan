@@ -9,5 +9,8 @@
         public DateTime CreationDate { get; set; } = DateTime.Now;
         public Status Status { get; set; }
         public Priority Priority { get; set; }
+
+        public int? ListId { get; set; }
+        public virtual List? List { get; set; }
     }
 }

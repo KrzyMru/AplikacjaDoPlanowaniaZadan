@@ -1,5 +1,6 @@
 
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
+using AplikacjaDoPlanowaniaZadan.Server.DataModels;
 using AplikacjaDoPlanowaniaZadan.Server.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -38,7 +39,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server
 
             builder.Services.AddAuthorization();
             builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.ApplicationScheme);
-            builder.Services.AddIdentityCore<IdentityUser>()
+            builder.Services.AddIdentityCore<ApplicationUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddApiEndpoints();
             var app = builder.Build();
@@ -58,7 +59,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server
 
             app.UseHttpsRedirection();
 
-            app.MapIdentityApi<IdentityUser>();
+            app.MapIdentityApi<ApplicationUser>();
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
