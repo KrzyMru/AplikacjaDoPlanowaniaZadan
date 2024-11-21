@@ -26,7 +26,7 @@ const SignUp = () => {
             errors.password = 'Password must start with capital letter.';
         } else if (/^[a-zA-Z0-9]+$/?.test(values.password)) {
             errors.password = 'Password must contain at least one non-alphanumeric character.';
-        } else if (/\d/.test(values.password)) {
+        } else if (!/\d/.test(values.password)) {
             errors.password = 'Password must contain at least one digit.';
         } else if (values.password.length < 8) {
             errors.password = 'Password must be at least 8 characters long.';
