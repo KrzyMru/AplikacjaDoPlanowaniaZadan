@@ -42,9 +42,11 @@ function App() {
                     <Route
                         path="/"
                         element={
-                            <Home
-                                token={token}
-                            /> 
+                            <ProtectedRoute allowed={token !== null} redirectPath="/signIn">
+                                <Home
+                                    token={token}
+                                /> 
+                            </ProtectedRoute>
                         }
                     />
                     <Route
