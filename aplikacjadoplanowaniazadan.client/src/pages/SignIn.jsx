@@ -24,9 +24,9 @@ const SignIn = ({ setToken }) => {
             errors.password = 'Required';
         } else if (values.password.length > 0 && values.password[0] !== values.password[0].toUpperCase()) {
             errors.password = 'Password must start with capital letter.';
-        } else if (/^[a-zA-Z0-9]+$/?.test(values.password)) {
+        } else if (/^[a-zA-Z0-9]+$/.test(values.password)) {
             errors.password = 'Password must contain at least one non-alphanumeric character.';
-        } else if (!/\d/?.test(values.password)) {
+        } else if (!/\d/.test(values.password)) {
             errors.password = 'Password must contain at least one digit.';
         } else if (values.password.length < 8) {
             errors.password = 'Password must be at least 8 characters long.';
@@ -96,6 +96,7 @@ const SignIn = ({ setToken }) => {
                             gap: 2,
                         }}
                     >
+                        <Typography variant="h4" sx={{ alignSelf: 'center' }}>Sign In</Typography>
                         <FormControl>
                             <FormLabel htmlFor="email">Email</FormLabel>
                             <TextField
@@ -119,7 +120,6 @@ const SignIn = ({ setToken }) => {
                                 type="password"
                                 name="password"
                                 autoComplete="current-password"
-                                autoFocus
                                 required
                                 fullWidth
                                 variant="outlined"

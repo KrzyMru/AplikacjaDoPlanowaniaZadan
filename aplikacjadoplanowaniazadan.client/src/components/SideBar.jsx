@@ -16,6 +16,7 @@ import CreateList from './dialogs/CreateList';
 import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskListHeaderSkeleton from './skeletons/TaskListHeaderSkeleton';
+import Typography from '@mui/material/Typography';
 
 export default function SideBar({ handleSelect, taskListHeaders, setTaskListHeaders }) {
 
@@ -82,15 +83,20 @@ export default function SideBar({ handleSelect, taskListHeaders, setTaskListHead
                         width: 'fit-content',
                     }
                 }}
-                sx={{ width: 'fit-content' }}
+                sx={{ width: 'fit-content' }}  
             >
                 <Box
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: open ? 'flex-end' : 'flex-start', mx: 1 + 1 / 2
+                        justifyContent: open ? 'space-between' : 'flex-start', mx: 1 + 1 / 2
                     }}
                 >
+                    <Typography variant="h6"
+                        sx={{ display: open ? 'block' : 'none' }}
+                    >
+                        {"Menu"}
+                    </Typography>
                     <IconButton onClick={open ? handleClose : handleOpen}>
                         {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>

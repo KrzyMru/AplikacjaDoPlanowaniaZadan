@@ -58,6 +58,7 @@ const EditList = ({ open, onClose, taskList, editList }) => {
                     onChange={(value) => {
                         setFormData((prev) => ({ ...prev, color: value }))
                     }}
+                    sx={{width: '100%'}}
                 />
                 {error &&
                     <Alert severity="error" sx={{ mt: 3 }}>
