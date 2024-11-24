@@ -17,7 +17,7 @@ export default function Today({ hidden }) {
     const getTodayTasks = async () => {
         setLoadingList(true);
         try {
-            const response = await fetch("http://localhost:5141/api/task/todayTasks", {
+            /*const response = await fetch("http://localhost:5141/api/task/todayTasks", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -26,7 +26,33 @@ export default function Today({ hidden }) {
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTodayTasks(data);
+            setTodayTasks(data);*/
+            setTodayTasks(
+                [
+                    {
+                        id: 0, 
+                        name: "Task01",
+                        description: "Task01 desc",
+                        status: 0,
+                        priority: 0,
+                        dueTo: "2024-11-19 15:12:10",
+                    },
+                    {
+                        id: 1,
+                        name: "Task02",
+                        description: "Task02 desc",
+                        status: 1,
+                        priority: 1,
+                    },
+                    {
+                        id: 2,
+                        name: "Task03",
+                        description: "Task03 desc",
+                        status: 2,
+                        priority: 2,
+                    },
+                ]
+            );
         }
         catch (error) { }
         finally {
@@ -110,7 +136,7 @@ export default function Today({ hidden }) {
                             There are no tasks due today
                         </Typography>
                         :
-                        todayTasks.map((task) => (
+                        todayTasks?.sort((t1, t2) => t2?.priority - t1?.priority)?.map((task) => (
                         <Paper elevation={1} key={task.id} sx={{ mb: 1 }}>
                             <Task
                                 task={task}

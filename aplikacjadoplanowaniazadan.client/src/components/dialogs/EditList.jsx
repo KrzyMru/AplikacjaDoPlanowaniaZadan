@@ -3,37 +3,22 @@ import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextFi
 import SaveIcon from '@mui/icons-material/Save';
 import { MuiColorInput } from "mui-color-input";
 
-const EditList = ({ open, onClose, taskList, setTaskList }) => {
+const EditList = ({ open, onClose, taskList, editList }) => {
 
-    const editList = async (formData) => {
+    const [formData, setFormData] = React.useState(taskList);
+    const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState(null);
+
+    const handleEditList = async (formData) => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:5141/api/list/editList", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-            if (!response.ok)
-                throw Error(response?.status);
-            const data = await response.json();
-            setTaskList(data);
-            //setTaskList({ ...taskList, ...formData });
+            await editList(formData);
             onClose();
         } catch (error) {
             setError("Something went wrong.");
         } finally {
             setLoading(false);
         }
-    }
-
-    const [formData, setFormData] = React.useState(taskList);
-    const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState(null);
-
-    const handleEditList = (formData) => {
-        editList(formData);
     }
 
     return (
@@ -73,6 +58,7 @@ const EditList = ({ open, onClose, taskList, setTaskList }) => {
                     onChange={(value) => {
                         setFormData((prev) => ({ ...prev, color: value }))
                     }}
+                    sx={{width: '100%'}}
                 />
                 {error &&
                     <Alert severity="error" sx={{ mt: 3 }}>

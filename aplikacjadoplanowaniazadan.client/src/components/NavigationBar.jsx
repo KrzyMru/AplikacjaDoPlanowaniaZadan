@@ -14,16 +14,22 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
+//import CheckSession from "../utility/CheckSession";
 
-const navigationLeft = [
-    { name: 'Home', link: '/' },
-];
-const navigationRight = [
-    { name: 'SignIn', link: '/signIn' },
-    { name: 'SignUp', link: '/signUp' },
-];
+function NavigationBar({ token }) {
 
-function NavigationBar() {
+    const navigationLeft = [
+        { name: 'Home', link: '/' },
+    ];
+    const navigationRight = token ?
+        [
+            { name: 'SignOut', link: '/signOut' },
+        ]
+        :
+        [
+            { name: 'SignIn', link: '/signIn' },
+            { name: 'SignUp', link: '/signUp' },
+        ];
 
     const [menuOpen, setMenuOpen] = useState(false);
 

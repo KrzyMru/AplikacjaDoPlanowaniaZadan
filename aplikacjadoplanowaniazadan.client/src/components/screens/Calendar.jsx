@@ -165,8 +165,8 @@ export default function Calendar({ hidden }) {
         >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateCalendar
-                    showDaysOutsideCurrentMonth
-                    fixedWeekNumber={6}
+                    //showDaysOutsideCurrentMonth
+                    //fixedWeekNumber={6}
                     value={selectedDate}
                     onChange={(newValue) => setSelectedDate(newValue)}
                     onMonthChange={handleMonthChange}
@@ -200,7 +200,7 @@ export default function Calendar({ hidden }) {
                                 No tasks scheduled for this day
                             </Typography>
                             :
-                            dayTasks?.map((task) => (
+                                dayTasks.sort((t1, t2) => t2?.priority - t1?.priority).map((task) => (
                                 <Paper elevation={1} key={task.id} sx={{ mb: 1 }}>
                                     <Task
                                         task={task}

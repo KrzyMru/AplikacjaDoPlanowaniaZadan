@@ -70,6 +70,7 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
                     onChange={(value) => {
                         setFormData((prev) => ({ ...prev, color: value }))
                     }}
+                    sx={{ width: '100%' }}
                 />
                 {error &&
                     <Alert severity="error" sx={{ mt: 3 }}>
