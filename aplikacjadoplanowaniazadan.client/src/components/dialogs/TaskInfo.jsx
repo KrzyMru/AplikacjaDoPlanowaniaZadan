@@ -4,14 +4,14 @@ import dayjs from "dayjs";
 import FlagIcon from '@mui/icons-material/Flag';
 
 const GetDaysFromSeconds = (seconds) => {
-    return Math.floor(seconds / 86400) + " Days"
+    return Math.floor(seconds / 86400) + " Days";
 }
 const GetTimeFromSeconds = (seconds) => {
     var result = "";
     const days = Math.floor(seconds / 86400);
-    const hours = (Math.floor(seconds / 3600) - days * 3600);
-    const minutes = (Math.floor(seconds / 60) - hours * 60)
-    const secs = (seconds - minutes * 60 - hours * 3600 - days * 216000);
+    const hours = (Math.floor((seconds - days * 86400) / 3600));
+    const minutes = (Math.floor((seconds - days * 86400 - hours * 3600) / 60));
+    const secs = (seconds - minutes * 60 - hours * 3600 - days * 86400);
     result += hours + "h "
     result += minutes + "m "
     result += secs + "s"
@@ -27,6 +27,11 @@ const TaskInfo = ({ open, onClose, task }) => {
 
         return () => clearInterval(interval);
     }, []);
+
+    const secondDifference = task?.status !== 1 ?
+        dayjs(task?.dueTo).subtract(1, 'hour').diff(timeNow, 'second') 
+        :
+        timeNow?.diff(dayjs(task?.dueTo).subtract(1, 'hour'), 'second') 
 
     return (
         <Dialog
@@ -72,23 +77,39 @@ const TaskInfo = ({ open, onClose, task }) => {
                             {"Created"}
                         </Typography>
                         <Typography variant="caption" align="center">
-                            {task?.dueTo?.substring(11, 19)}
+                            {task?.creationDate?.substring(11, 19)}
                         </Typography>
                         <Typography variant="caption" align="center">
-                            {task?.dueTo?.substring(0, 10)?.replaceAll('-', '/')}
+                            {task?.creationDate?.substring(0, 10)?.replaceAll('-', '/')}
                         </Typography>
                     </Box>
                     <Divider orientation="vertical" flexItem />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <Typography variant="overline" align="center">
-                            {"Time left"}
+                        <Typography variant="overline" align="center"
+                            sx={{
+                                textDecorationLine: task?.status == 2 ? 'line-through' : null,
+                                textDecorationStyle: task?.status == 2 ? 'solid' : null,
+                            }}
+                        >
+                            {task?.status !== 1 ? "Time left" : "Overdue by"}
                         </Typography>
-                        <Typography variant="caption" align="center">
-                            {GetDaysFromSeconds(dayjs(task?.dueTo).diff(timeNow, 'second'))}
-                        </Typography>
-                        <Typography variant="caption" align="center">
-                            {GetTimeFromSeconds(dayjs(task?.dueTo).diff(timeNow, 'second'))}
-                        </Typography>
+                        {
+                            task?.status !== 2 ? 
+                            <React.Fragment>
+                                <Typography variant="caption" align="center">
+                                    {GetDaysFromSeconds(secondDifference)}
+                                </Typography>
+                                <Typography variant="caption" align="center">
+                                    {GetTimeFromSeconds(secondDifference)}
+                                </Typography>
+                            </React.Fragment>
+                            :
+                            <React.Fragment>
+                                <Typography variant="subtitle1" align="center">
+                                    {"Completed"}
+                                </Typography>
+                            </React.Fragment>
+                        }               
                     </Box>
                     <Divider orientation="vertical" flexItem />
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>

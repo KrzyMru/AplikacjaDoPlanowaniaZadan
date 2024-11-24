@@ -17,7 +17,7 @@ export default function Today({ hidden }) {
     const getTodayTasks = async () => {
         setLoadingList(true);
         try {
-            /*const response = await fetch("http://localhost:5141/api/task/todayTasks", {
+            const response = await fetch("http://localhost:5141/api/task/todayTasks", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -26,33 +26,7 @@ export default function Today({ hidden }) {
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTodayTasks(data);*/
-            setTodayTasks(
-                [
-                    {
-                        id: 0, 
-                        name: "Task01",
-                        description: "Task01 desc",
-                        status: 0,
-                        priority: 0,
-                        dueTo: "2024-11-19 15:12:10",
-                    },
-                    {
-                        id: 1,
-                        name: "Task02",
-                        description: "Task02 desc",
-                        status: 1,
-                        priority: 1,
-                    },
-                    {
-                        id: 2,
-                        name: "Task03",
-                        description: "Task03 desc",
-                        status: 2,
-                        priority: 2,
-                    },
-                ]
-            );
+            setTodayTasks(data);
         }
         catch (error) { }
         finally {
