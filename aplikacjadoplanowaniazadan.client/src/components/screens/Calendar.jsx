@@ -91,7 +91,6 @@ export default function Calendar({ hidden }) {
     const deleteTask = async (taskId) => {
         setLoadingTaskAction([...loadingTaskAction, taskId]);
         try {
-            console.log("deleteTask: " + taskId);
             const response = await fetch("http://localhost:5141/api/task/deleteTask", {
                 method: "DELETE",
                 headers: {
@@ -110,7 +109,6 @@ export default function Calendar({ hidden }) {
     }
     const toggleTask = async (taskId) => {
         try {
-            console.log("toggleTask: " + taskId);
             const response = await fetch("http://localhost:5141/api/task/toggleTask", {
                 method: "POST",
                 headers: {
