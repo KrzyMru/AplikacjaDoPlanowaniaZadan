@@ -2,6 +2,7 @@
 using AplikacjaDoPlanowaniaZadan.Server.DataModels;
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using Microsoft.EntityFrameworkCore;
+using Task = AplikacjaDoPlanowaniaZadan.Server.DataModels.Task;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -18,18 +19,34 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             _context = context;
         }
 
-        
-        [HttpPost("saveList")]
-        public IActionResult saveList([FromBody] List list)
+        public class CreateListRequest
         {
-            if (list == null)
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public string Color { get; set; }
+            public List<Task> Tasks { get; set; } = new List<Task>();
+        }
+
+
+        [HttpPost("saveList")]
+        public IActionResult saveList([FromBody] CreateListRequest request)
+        {
+            if (request == null || string.IsNullOrWhiteSpace(request.Name))
             {
-                return BadRequest("List data is invalid.");
+                return BadRequest("Invalid list data.");
             }
 
-            _context.Lists.Add(list);
+            var newList = new List
+            {
+                Name = request.Name,
+                Description = request.Description,
+                Color = request.Color,
+            };
+
+            _context.Lists.Add(newList);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(getTaskList), new { id = list.Id }, list);
+
+            return CreatedAtAction(nameof(getTaskList), new { id = newList.Id }, newList);
         }
 
 
@@ -91,10 +108,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpDelete("deleteList")]
         public IActionResult deleteList([FromBody] int id)
         {
-            if (id <= 0)
-            {
-                return BadRequest("Invalid list ID.");
-            }
 
             var list = _context.Lists.FirstOrDefault(l => l.Id == id);
 
