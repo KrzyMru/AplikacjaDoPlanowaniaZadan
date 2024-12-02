@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogTitle, Divider, Typography, Box } from "@mui/material";
 
-const NotificationInfo = ({ open, onClose, task }) => {
+const NotificationInfo = ({ open, onClose, notification }) => {
 
     return (
         <Dialog
@@ -21,13 +21,10 @@ const NotificationInfo = ({ open, onClose, task }) => {
             <DialogContent>
                 <Box
                     sx={{
-                        display: task?.dueTo ? 'flex' : 'none',
+                        display: 'flex',
                         justifyContent: 'space-around',
                         mb: '20px',
-                        backgroundColor:
-                            task?.status === 0 ? '#dceef3' :
-                                task?.status === 1 ? '#ffc6c6' :
-                                    '#ccedcc',
+                        backgroundColor: '#dceef3',
                         borderRadius: 1
                     }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -35,10 +32,10 @@ const NotificationInfo = ({ open, onClose, task }) => {
                             {"Sent on"}
                         </Typography>
                         <Typography variant="caption" align="center">
-                            {notification?.sendInfo?.substring(11, 19)}
+                            {notification?.sendDate?.substring(11, 19)}
                         </Typography>
                         <Typography variant="caption" align="center">
-                            {notification?.sendInfo?.substring(0, 10)?.replaceAll('-', '/')}
+                            {notification?.sendDate?.substring(0, 10)?.replaceAll('-', '/')}
                         </Typography>
                     </Box>
                 </Box>
