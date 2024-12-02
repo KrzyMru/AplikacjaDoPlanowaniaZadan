@@ -3,6 +3,7 @@ using AplikacjaDoPlanowaniaZadan.Server.DataModels;
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Task = AplikacjaDoPlanowaniaZadan.Server.DataModels.Task;
+using System.Collections.Generic;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -41,6 +42,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 Name = request.Name,
                 Description = request.Description,
                 Color = request.Color,
+                Tasks = new List<Task>()
             };
 
             _context.Lists.Add(newList);
@@ -53,17 +55,35 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpPost("getTaskList")]
         public IActionResult getTaskList([FromBody] int listId)
         {
-            var list = _context.Lists.FirstOrDefault(l => l.Id == listId);
+            var list = _context.Lists
+                .Include(l => l.Tasks)
+                .Where(l => l.Id == listId)
+                .Select(l => new
+                {
+                    l.Id,
+                    l.Name,
+                    l.Description,
+                    l.Color,
+                    Tasks = l.Tasks.Select(t => new
+                    {
+                        t.Id,
+                        t.Name,
+                        t.Description,
+                        t.DueTo,
+                        t.Priority,
+                        t.Status
+                    }).ToList()
+                })
+                .FirstOrDefault();
 
             if (list == null)
             {
                 return NotFound();
             }
 
-            //var tasks = _context.Tasks.Where(t => t.Id == listId).ToList();
-
-            return Ok(list); 
+            return Ok(list);
         }
+
 
 
         [HttpGet("getTaskListHeaders")]
@@ -83,14 +103,16 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         }
 
         [HttpPost("editList")]
-        public IActionResult editList([FromBody] List updatedList)
+        public IActionResult EditList([FromBody] List updatedList)
         {
             if (updatedList == null || updatedList.Id <= 0)
             {
                 return BadRequest("List data is invalid.");
             }
 
-            var existingList = _context.Lists.FirstOrDefault(l => l.Id == updatedList.Id);
+            var existingList = _context.Lists
+                .Include(l => l.Tasks) 
+                .FirstOrDefault(l => l.Id == updatedList.Id);
 
             if (existingList == null)
             {
@@ -102,8 +124,25 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             existingList.Color = updatedList.Color;
 
             _context.SaveChanges();
-            return Ok(existingList);
+
+            return Ok(new
+            {
+                Id = existingList.Id,
+                Name = existingList.Name,
+                Description = existingList.Description,
+                Color = existingList.Color,
+                Tasks = existingList.Tasks.Select(t => new
+                {
+                    t.Id,
+                    t.Name,
+                    t.Description,
+                    t.DueTo,
+                    Priority = (int)t.Priority, 
+                    Status = (int)t.Status 
+                }).ToList()
+            });
         }
+
 
         [HttpDelete("deleteList")]
         public IActionResult deleteList([FromBody] int id)

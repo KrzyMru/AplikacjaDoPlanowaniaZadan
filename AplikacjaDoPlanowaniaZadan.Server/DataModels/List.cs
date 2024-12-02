@@ -7,7 +7,7 @@
         public string Description { get; set; }
         public string Color { get; set; }
 
-        public IList<Task> Tasks { get; set; }
+        public IList<Task> Tasks { get; set; } = new List<Task>();
 
         public string? ApplicationUserId { get; set; }
         public virtual ApplicationUser? ApplicationUser { get; set; }

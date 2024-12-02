@@ -63,7 +63,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 _context.SaveChanges();
 
                
-                return CreatedAtAction(nameof(SaveTask), new { id = task.Id }, task);
+                return Ok(task);
             }
             catch (Exception ex)
             {
@@ -74,13 +74,13 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
 
         [HttpDelete("deleteTask")]
-        public IActionResult DeleteTask(int taskId)
+        public IActionResult DeleteTask([FromBody] int taskId)
         {
             var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
 
             if (task == null)
             {
-                return NotFound("Task not found.");
+                return NotFound(new { success = false, message = "Task not found." });
             }
 
             _context.Tasks.Remove(task);
@@ -88,6 +88,9 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
             return Ok(new { success = true, message = "Task deleted successfully." });
         }
+
+
+
 
         [HttpPost("getDayTasks")]
         public IActionResult GetDayTasks([FromBody] DateTime requestDate)
@@ -141,12 +144,12 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
             try
             {
-               
+                var due2 = task.DueTo;
                 switch (task.Status)
                 {
                     case Status.Finished:
                         task.Status = Status.Planned;
-                        task.DueTo = default; 
+                        task.DueTo = task.DueTo; 
                         break;
 
                     case Status.Planned:
