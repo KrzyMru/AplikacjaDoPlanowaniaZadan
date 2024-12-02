@@ -29,6 +29,7 @@ const Home = ({ token }) => {
                     }}
                 >
                     <SideBar
+                        token={token}
                         handleSelect={handleSelect}
                         taskListHeaders={taskListHeaders}
                         setTaskListHeaders={setTaskListHeaders}

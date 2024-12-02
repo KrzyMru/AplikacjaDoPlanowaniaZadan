@@ -4,6 +4,12 @@ using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Task = AplikacjaDoPlanowaniaZadan.Server.DataModels.Task;
 using System.Collections.Generic;
+using System.Security.Claims;
+using System.Net;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -32,6 +38,9 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpPost("saveList")]
         public IActionResult saveList([FromBody] CreateListRequest request)
         {
+            // token, trzeba będzie zdekodować. nie usuwać tego bo pozabijam
+            var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+
             if (request == null || string.IsNullOrWhiteSpace(request.Name))
             {
                 return BadRequest("Invalid list data.");

@@ -57,7 +57,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server
                 app.ApplyMigrations();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.MapIdentityApi<ApplicationUser>();
             app.MapControllers();
