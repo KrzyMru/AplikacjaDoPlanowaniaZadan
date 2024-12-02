@@ -42,7 +42,7 @@ export default function Calendar({ hidden, token }) {
     const getMonthTaskCounts = async (date) => {
         setLoadingCalendar(true);
         try {
-            const response = await fetch("http://localhost:5141/api/list/getMonthTaskCounts", {
+            const response = await fetch("http://localhost:5141/api/task/getMonthTaskCounts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +64,7 @@ export default function Calendar({ hidden, token }) {
     const getDayTasks = async (date) => {
         setLoadingTasks(true);
         try {
-            const response = await fetch("http://localhost:5141/api/list/getDayTasks", {
+            const response = await fetch("http://localhost:5141/api/task/getDayTasks", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
