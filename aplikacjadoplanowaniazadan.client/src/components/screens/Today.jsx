@@ -7,7 +7,7 @@ import { Paper } from '@mui/material';
 import Task from '../Task';
 import TaskListSkeleton from '../skeletons/TaskListSkeleton';
 
-export default function Today({ hidden }) {
+export default function Today({ hidden, token }) {
 
     React.useEffect(() => {
         if (!hidden)
@@ -21,6 +21,7 @@ export default function Today({ hidden }) {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
             });
             if (!response.ok)
@@ -40,6 +41,7 @@ export default function Today({ hidden }) {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(taskId),
             });
@@ -58,6 +60,7 @@ export default function Today({ hidden }) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(taskId),
             });

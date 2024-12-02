@@ -4,14 +4,14 @@ import dayjs from "dayjs";
 import FlagIcon from '@mui/icons-material/Flag';
 
 const GetDaysFromSeconds = (seconds) => {
-    return Math.floor(seconds / 86400) + " Days";
+    return Math.max(Math.floor(seconds / 86400), 0) + " Days";
 }
 const GetTimeFromSeconds = (seconds) => {
     var result = "";
-    const days = Math.floor(seconds / 86400);
-    const hours = (Math.floor((seconds - days * 86400) / 3600));
-    const minutes = (Math.floor((seconds - days * 86400 - hours * 3600) / 60));
-    const secs = (seconds - minutes * 60 - hours * 3600 - days * 86400);
+    const days = Math.max(Math.floor(seconds / 86400), 0);
+    const hours = Math.max(Math.floor((seconds - days * 86400) / 3600), 0);
+    const minutes = Math.max(Math.floor((seconds - days * 86400 - hours * 3600) / 60), 0);
+    const secs = Math.max(seconds - minutes * 60 - hours * 3600 - days * 86400, 0);
     result += hours + "h "
     result += minutes + "m "
     result += secs + "s"
@@ -23,7 +23,7 @@ const TaskInfo = ({ open, onClose, task }) => {
     const [timeNow, setTimeNow] = React.useState(dayjs());
 
     React.useEffect(() => {
-        const interval = setInterval(() => setTimeNow(dayjs()), 1000);
+        const interval = setInterval(() => setTimeNow(dayjs().subtract(1, 'hour')), 1000);
 
         return () => clearInterval(interval);
     }, []);

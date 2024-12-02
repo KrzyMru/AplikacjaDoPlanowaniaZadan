@@ -37,21 +37,16 @@ function DayWithBadge(props) {
     );
 }
 
-export default function Calendar({ hidden }) {
+export default function Calendar({ hidden, token }) {
 
     const getMonthTaskCounts = async (date) => {
         setLoadingCalendar(true);
         try {
-            // wysy³a np 2024-11 i 30.
-            //console.log(date?.format('YYYY-MM'), date?.daysInMonth());
-            // otrzymuje np {13: 2, 16: 3}, gdzie {numerDnia: liczbaZadan}
-            // nie trzeba dawaæ dni bez zadañ
-            //setMonthTaskCounts({13: 2, 16: 3});
-
             const response = await fetch("http://localhost:5141/api/list/getMonthTaskCounts", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(date?.format('YYYY-MM'), date?.daysInMonth()),
             });
@@ -69,12 +64,11 @@ export default function Calendar({ hidden }) {
     const getDayTasks = async (date) => {
         setLoadingTasks(true);
         try {
-            // wysy³ane do getDayTasks
-            //console.log("getDayTasks: " + date?.format('YYYY-MM-DD'));
             const response = await fetch("http://localhost:5141/api/list/getDayTasks", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(date?.format('YYYY-MM-DD')),
             });
@@ -95,6 +89,7 @@ export default function Calendar({ hidden }) {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(taskId),
             });
@@ -113,6 +108,7 @@ export default function Calendar({ hidden }) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(taskId),
             });

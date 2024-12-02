@@ -13,7 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import EditList from '../dialogs/EditList';
 
-export default function TaskList({ hidden, listId, setSelected, taskListHeaders, setTaskListHeaders }) {
+export default function TaskList({ hidden, token, listId, setSelected, taskListHeaders, setTaskListHeaders }) {
 
     React.useEffect(() => {
         if (!hidden)
@@ -27,6 +27,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(listId),
             });
@@ -47,6 +48,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(taskId),
             });
@@ -65,6 +67,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(taskId),
             });
@@ -90,6 +93,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(listId),
             });
@@ -108,6 +112,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + token,
             },
             body: JSON.stringify(formData),
         });
@@ -209,6 +214,7 @@ export default function TaskList({ hidden, listId, setSelected, taskListHeaders,
             <CreateTask
                 open={openCreateTask}
                 onClose={handleCloseCreateTask}
+                token={token}
                 taskList={taskList}
                 setTaskList={setTaskList}
             />

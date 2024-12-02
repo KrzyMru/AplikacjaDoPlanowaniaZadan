@@ -17,8 +17,9 @@ import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskListHeaderSkeleton from './skeletons/TaskListHeaderSkeleton';
 import Typography from '@mui/material/Typography';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
-export default function SideBar({ handleSelect, taskListHeaders, setTaskListHeaders }) {
+export default function SideBar({ token, handleSelect, taskListHeaders, setTaskListHeaders }) {
 
     React.useEffect(() => {
         getTaskListHeaders();
@@ -31,6 +32,7 @@ export default function SideBar({ handleSelect, taskListHeaders, setTaskListHead
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
             });
             if (!response.ok)
@@ -69,6 +71,10 @@ export default function SideBar({ handleSelect, taskListHeaders, setTaskListHead
         {
             name: 'Calendar',
             icon: <CalendarMonthIcon />
+        },
+        {
+            name: 'Notifications',
+            icon: <NotificationsIcon />
         },
     ];
     
@@ -225,6 +231,7 @@ export default function SideBar({ handleSelect, taskListHeaders, setTaskListHead
             <CreateList
                 open={openCreateList}
                 onClose={handleCloseCreateList}
+                token={token}
                 taskListHeaders={taskListHeaders}
                 setTaskListHeaders={setTaskListHeaders}
             />

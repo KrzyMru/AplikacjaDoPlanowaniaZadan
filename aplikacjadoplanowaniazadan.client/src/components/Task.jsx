@@ -84,7 +84,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
                 <Divider flexItem orientation="vertical" sx={{ mx: 1, display: { xs: "none", sm: "block" } }} />
                 <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1 }}>
                     <Typography variant="overline" align="center">
-                        {"Due"}
+                        {task?.status !== 2 ? "Due" : "Completed"}
                     </Typography>
                     <Typography variant="caption" align="center">
                         {task?.dueTo?.substring(11, 19)}

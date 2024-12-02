@@ -3,7 +3,7 @@ import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextFi
 import SaveIcon from '@mui/icons-material/Save';
 import { MuiColorInput } from "mui-color-input";
 
-const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
+const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders }) => {
 
     const saveList = async (formData) => {
         setLoading(true);
@@ -12,6 +12,7 @@ const CreateList = ({ open, onClose, taskListHeaders, setTaskListHeaders }) => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify(formData),
             });

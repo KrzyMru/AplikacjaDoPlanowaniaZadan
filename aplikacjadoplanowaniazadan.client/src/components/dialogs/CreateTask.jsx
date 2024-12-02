@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
+const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
 
     const [formData, setFormData] = React.useState({priority: 1});
     const [loading, setLoading] = React.useState(false);
@@ -17,13 +17,12 @@ const CreateTask = ({ open, onClose, taskList, setTaskList }) => {
 
     const saveTask = async (formData) => {
         setLoading(true);
-        // To jest wysy³ane do saveTask
-        console.log({ ...formData, dueTo: formData?.dueTo?.format("YYYY-MM-DD HH:mm:ss") });
         try {
             const response = await fetch("http://localhost:5141/api/task/saveTask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + token,
                 },
                 body: JSON.stringify({ ...formData, dueTo: formData?.dueTo?.format("YYYY-MM-DD HH:mm:ss") }),
             });
