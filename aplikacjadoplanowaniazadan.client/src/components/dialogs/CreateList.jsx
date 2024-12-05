@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import { MuiColorInput } from "mui-color-input";
+import { toast } from 'react-toastify';
 
 const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders }) => {
 
@@ -20,6 +21,10 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders 
                 throw Error(response?.status);
             const data = await response.json();
             setTaskListHeaders([data, ...taskListHeaders]);
+            toast("List created successfully.", {
+                theme: "light",
+                type: "success",
+            });
             onClose();
         } catch (error) {
             setError("Something went wrong.");

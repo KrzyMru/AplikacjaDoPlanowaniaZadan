@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import EditList from '../dialogs/EditList';
+import { toast } from 'react-toastify';
 
 export default function TaskList({ hidden, token, listId, setSelected, taskListHeaders, setTaskListHeaders }) {
 
@@ -54,9 +55,18 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
             });
             if (!response.ok)
                 throw Error(response?.status);
-            setTaskList({...taskList, tasks: taskList.tasks.filter(task => task.id !== taskId)});
+            setTaskList({ ...taskList, tasks: taskList.tasks.filter(task => task.id !== taskId) });
+            toast("Task deleted successfully.", {
+                theme: "light",
+                type: "success",
+            });
         }
-        catch (error) { }
+        catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
             setLoadingTaskAction(loadingTaskAction.filter(id => id !== taskId));
         }
@@ -81,7 +91,16 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
                         task.id === taskId ? data : task
                     )
             });
-        } catch (error) { }
+            toast("Task status changed successfully.", {
+                theme: "light",
+                type: "success",
+            });
+        } catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
 
         }
@@ -101,7 +120,16 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
                 throw Error(response?.status);
             setSelected("Today");
             setTaskListHeaders(taskListHeaders?.filter(tsklst => tsklst?.id !== listId));
-        } catch (error) { }
+            toast("List deleted successfully.", {
+                theme: "light",
+                type: "success",
+            });
+        } catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
             setLoadingListAction(false);
         }
@@ -121,6 +149,10 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
         const data = await response.json();
         setTaskList(data);
         setTaskListHeaders(taskListHeaders.map(tlh => tlh?.id === data?.id ? { ...tlh, name: data?.name, color: data?.color } : tlh));
+        toast("List details changed successfully.", {
+            theme: "light",
+            type: "success",
+        });
     }
 
     const [loadingList, setLoadingList] = React.useState(false);

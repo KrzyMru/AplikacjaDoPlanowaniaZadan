@@ -6,6 +6,7 @@ import Divider from '@mui/material/Divider';
 import { Paper } from '@mui/material';
 import Task from '../Task';
 import TaskListSkeleton from '../skeletons/TaskListSkeleton';
+import { toast } from 'react-toastify';
 
 export default function Today({ hidden, token }) {
 
@@ -48,8 +49,17 @@ export default function Today({ hidden, token }) {
             if (!response.ok)
                 throw Error(response?.status);
             setTodayTasks(todayTasks.filter(task => task.id !== taskId));
+            toast("Task deleted successfully.", {
+                theme: "light",
+                type: "success",
+            });
         }
-        catch(error) { }
+        catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
             setLoadingAction(loadingAction.filter(tid => tid !== taskId));
         }
@@ -72,7 +82,16 @@ export default function Today({ hidden, token }) {
                     task.id === taskId ? data : task
                 )
             );
-        } catch (error) { }
+            toast("Task status changed successfully.", {
+                theme: "light",
+                type: "success",
+            });
+        } catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
 
         }

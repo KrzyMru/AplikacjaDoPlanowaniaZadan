@@ -8,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { toast } from 'react-toastify';
 
 const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
 
@@ -30,6 +31,10 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
                 throw Error(response?.status);
             const data = await response.json();
             setTaskList({ ...taskList, tasks: [data, ...taskList.tasks] });
+            toast("Task created successfully.", {
+                theme: "light",
+                type: "success",
+            });
             onClose();
         } catch (error) {
             setError("Something went wrong.");

@@ -13,6 +13,7 @@ import TaskListSkeleton from '../skeletons/TaskListSkeleton';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import Badge from '@mui/material/Badge';
 import { PickersDay } from '@mui/x-date-pickers/PickersDay';
+import { toast } from 'react-toastify';
 
 function DayWithBadge(props) {
     const { monthTaskCounts, day, outsideCurrentMonth, ...other } = props;
@@ -96,8 +97,17 @@ export default function Calendar({ hidden, token }) {
             if (!response.ok)
                 throw Error(response?.status);
             setDayTasks(dayTasks?.filter(task => task.id !== taskId));
+            toast("Task deleted successfully.", {
+                theme: "light",
+                type: "success",
+            });
         }
-        catch (error) { }
+        catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
             setLoadingTaskAction(loadingTaskAction.filter(id => id !== taskId));
         }
@@ -120,7 +130,16 @@ export default function Calendar({ hidden, token }) {
                     task.id === taskId ? data : task
                 )
             );
-        } catch (error) { }
+            toast("Task status changed successfully.", {
+                theme: "light",
+                type: "success",
+            });
+        } catch (error) {
+            toast("Something went wrong.", {
+                theme: "light",
+                type: "error",
+            });
+        }
         finally {
 
         }

@@ -11,9 +11,31 @@ import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import NavigationBar from "./components/NavigationBar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+    return (
+        <React.Fragment>
+            <MainComponent />
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme={"light"}
+                transition: Bounce
+            />
+        </React.Fragment>
+    );
+}
+
+function MainComponent() {
     const [token, setToken] = React.useState(
         () => {
             var item = sessionStorage.getItem("token");

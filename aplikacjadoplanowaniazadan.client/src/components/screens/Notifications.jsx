@@ -28,9 +28,6 @@ export default function Notifications({ hidden, token }) {
                 throw Error(response?.status);
             const data = await response.json();
             setNotifications(data);
-/*            setNotifications(
-                [{id: 0, title: "nottt", content: "22020202", sendDate: '2024-12-02T12:11:1012121212'}]
-            );*/
         }
         catch (error) { }
         finally {
