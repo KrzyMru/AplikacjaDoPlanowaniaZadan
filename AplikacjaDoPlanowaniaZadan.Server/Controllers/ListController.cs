@@ -36,7 +36,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             var decodedToken = handler.ReadJwtToken(token);
             var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
 
-            var user = _context.Users.FirstOrDefault(user => user.Email == email);
+            var user = _context.Users
+                .Where(user => user.Email == email)
+                .Include(user => user.Lists)
+                .FirstOrDefault();
             if (user == null)
             {
                 return BadRequest();
@@ -54,9 +57,12 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 Color = request.Color,
                 Tasks = new List<Task>()
             };
+
             user.Lists.Add(newList);
             newList.User = user;
-            newList.UserId = user.Id.ToString();
+            newList.UserId = user.Id;
+
+            var count = user.Lists.Count;
 
             _context.Lists.Add(newList);
             _context.Users.Update(user);
