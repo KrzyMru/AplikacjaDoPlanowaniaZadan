@@ -6,10 +6,11 @@ using System;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.DAL.EF
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<DataModels.Task> Tasks { get; set; }
         public DbSet<DataModels.List> Lists { get; set; }
+        public DbSet<DataModels.User> Users { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

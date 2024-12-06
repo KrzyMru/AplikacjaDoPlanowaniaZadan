@@ -2,8 +2,12 @@
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using AplikacjaDoPlanowaniaZadan.Server.DataModels;
 using AplikacjaDoPlanowaniaZadan.Server.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text;
 
 namespace AplikacjaDoPlanowaniaZadan.Server
 {
@@ -38,10 +42,25 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             });
 
             builder.Services.AddAuthorization();
-            builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.ApplicationScheme);
-            builder.Services.AddIdentityCore<ApplicationUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddApiEndpoints();
+            //Jwt 
+            var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+            var jwtKey = builder.Configuration.GetSection("Jwt:Key").Get<string>();
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+             .AddJwtBearer(options =>
+             {
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = jwtIssuer,
+                     ValidAudience = jwtIssuer,
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                 };
+             });
+            //Jwt end
+            builder.Services.AddEndpointsApiExplorer();
             var app = builder.Build();
 
             app.UseCors("default");
@@ -53,13 +72,13 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-
                 app.ApplyMigrations();
             }
 
             //app.UseHttpsRedirection();
 
-            app.MapIdentityApi<ApplicationUser>();
+            app.UseAuthorization();
+            app.UseAuthentication();
             app.MapControllers();
 
             app.MapFallbackToFile("/index.html");

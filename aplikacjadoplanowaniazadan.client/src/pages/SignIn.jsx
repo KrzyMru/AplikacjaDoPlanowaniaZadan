@@ -46,7 +46,7 @@ const SignIn = ({ setToken }) => {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch("https://localhost:7241/login?useCookies=true", {
+                const response = await fetch("https://localhost:7241/api/Auth/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -55,7 +55,7 @@ const SignIn = ({ setToken }) => {
                 });
                 if (response.ok) {  
                     const data = await response.json();
-                    setToken(data?.accessToken);
+                    setToken(data?.content);
                     window.location.href = "/";
                 }
                 else

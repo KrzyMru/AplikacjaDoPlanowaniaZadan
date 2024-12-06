@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
+using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.DTO;
+using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -19,27 +22,25 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-
-
         public ListController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public class CreateListRequest
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public string Color { get; set; }
-            public List<Task> Tasks { get; set; } = new List<Task>();
-        }
-
-
         [HttpPost("saveList")]
         public IActionResult saveList([FromBody] CreateListRequest request)
         {
-            // token, trzeba będzie zdekodować. nie usuwać tego bo pozabijam
+            // token, trzeba tego użyć wszędzie
             var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+            var handler = new JwtSecurityTokenHandler();
+            var decodedToken = handler.ReadJwtToken(token);
+            var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+            var user = _context.Users.FirstOrDefault(user => user.Email == email);
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
             if (request == null || string.IsNullOrWhiteSpace(request.Name))
             {
@@ -53,11 +54,15 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 Color = request.Color,
                 Tasks = new List<Task>()
             };
+            user.Lists.Add(newList);
+            newList.User = user;
+            newList.UserId = user.Id.ToString();
 
             _context.Lists.Add(newList);
+            _context.Users.Update(user);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(getTaskList), new { id = newList.Id }, newList);
+            return Ok(new ListDTO(newList));
         }
 
 

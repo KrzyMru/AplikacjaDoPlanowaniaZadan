@@ -9,7 +9,7 @@
 
         public IList<Task> Tasks { get; set; } = new List<Task>();
 
-        public string? ApplicationUserId { get; set; }
-        public virtual ApplicationUser? ApplicationUser { get; set; }
+        public string? UserId { get; set; }
+        public virtual User? User { get; set; }
     }
 }

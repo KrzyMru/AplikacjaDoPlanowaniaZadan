@@ -46,7 +46,7 @@ const SignUp = () => {
             try {
                 setLoading(true);
                 setResponse(null);
-                const response = await fetch("https://localhost:7241/register", {
+                const response = await fetch("https://localhost:7241/api/Auth/register", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
