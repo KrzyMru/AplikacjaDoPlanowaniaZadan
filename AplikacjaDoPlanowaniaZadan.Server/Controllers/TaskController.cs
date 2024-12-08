@@ -8,6 +8,7 @@ using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
 using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.DTO;
+using System.Reflection.Metadata.Ecma335;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -86,19 +87,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				_context.Tasks.Add(task);
 				_context.SaveChanges();
 
-                var ret = _context.Lists.FirstOrDefault(y => y.Id == request.ListId).Tasks
-                .Where(x => x.Id == task.Id)
-                .Select(t => new
-                {
-                    t.Id,
-                    t.Name,
-                    t.Description,
-                    t.DueTo,
-                    t.CreationDate,
-                    t.Priority,
-                    t.Status
-                }).ToList();
-			    return Ok(ret);
+			    return Ok(new TaskDTO(task));
             }
 			catch (Exception ex)
 			{
