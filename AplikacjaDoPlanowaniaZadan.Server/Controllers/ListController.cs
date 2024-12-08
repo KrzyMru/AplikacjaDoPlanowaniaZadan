@@ -11,7 +11,6 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
-using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.DTO;
 using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
@@ -67,7 +66,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             _context.Users.Update(user);
             _context.SaveChanges();
 
-            return Ok(new ListDTO(newList));
+            return Ok(new List(newList));
         }
 
 		//[Authorize]

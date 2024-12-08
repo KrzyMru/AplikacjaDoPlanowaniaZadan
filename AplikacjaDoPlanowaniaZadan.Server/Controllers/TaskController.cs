@@ -7,7 +7,6 @@ using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests;
 using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
-using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.DTO;
 using System.Reflection.Metadata.Ecma335;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
@@ -40,7 +39,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			{
 				return BadRequest();
 			}
-            var todayTasks = _context.Tasks.Where(t => t.DueTo.Date == DateTime.Now.Date && t.List.UserId== user.Id).Select(x=> new
+            var todayTasks = _context.Tasks.Where(t => t.DueTo.Value.Date == DateTime.Now.Date && t.List.UserId== user.Id).Select(x=> new
             {
                 x.Id,
                 x.Name,
@@ -53,10 +52,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpPost("saveTask")]
         public IActionResult SaveTask([FromBody] SaveTaskRequest request)
         {
-            if (request == null || string.IsNullOrEmpty(request.Name) || string.IsNullOrEmpty(request.Description))
-            {
-                return BadRequest("Dane zadania są niepoprawne.");
-            }
             try
             {
 				var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
@@ -71,15 +66,26 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				if (user == null)
 				{
 					return BadRequest();
-				}
+                }
 
-				DateTime dateTime2 = DateTime.Parse(request.DueTo);
+				//if (request.DueTo != null) {
+				DateTime dateTime2;
+                DateTime? dateTime;
+                if (DateTime.TryParse(request.DueTo, out dateTime2) == false)
+                {
+                    dateTime = null;
+                }
+                else
+                    dateTime = dateTime2;
+
+                //}
+
                 var task = new Task
                 {
                     Name = request.Name,
                     Description = request.Description,
                     Priority = (Priority)request.Priority,
-                    DueTo = dateTime2,
+                    DueTo = dateTime,
                     Status = Status.Planned,
                     ListId = request.ListId
                 };
@@ -87,7 +93,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				_context.Tasks.Add(task);
 				_context.SaveChanges();
 
-			    return Ok(new TaskDTO(task));
+			    return Ok(new Task(task));
             }
 			catch (Exception ex)
 			{
@@ -148,7 +154,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			}
 
             var tasksForDay = _context.Tasks
-                .Where(t => t.DueTo.Date == requestDate.Date)  
+                .Where(t => t.DueTo.Value.Date == requestDate.Date)  
                 .ToList();
 
             var tasks = tasksForDay.Where(x => user.Lists.Any(y=>y.Id == x.ListId)).Select(x => new
@@ -191,7 +197,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
             var tasksInMonth = _context.Tasks
                 .Where(t => t.DueTo >= firstDayOfMonth && t.DueTo <= lastDayOfMonth).Where(x=> user.Lists.Any(y=>y.Id == x.ListId))
-                .GroupBy(t => t.DueTo.Day)  
+                .GroupBy(t => t.DueTo.Value.Day)  
                 .ToList();
 
 

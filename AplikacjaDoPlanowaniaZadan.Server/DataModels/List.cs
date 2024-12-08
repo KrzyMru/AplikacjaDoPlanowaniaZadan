@@ -11,5 +11,16 @@
 
         public int? UserId { get; set; }
         public virtual User? User { get; set; }
-    }
+
+		public List() { }
+
+		public List(List list)
+		{
+			Id = list.Id;
+			Name = list.Name;
+			Description = list.Description;
+			Color = list.Color;
+			Tasks = list.Tasks;
+		}
+	}
 }
