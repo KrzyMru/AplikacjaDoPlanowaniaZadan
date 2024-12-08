@@ -117,38 +117,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
                     b.HasIndex("ListId");
 
                     b.ToTable("Tasks");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreationDate = new DateTime(2024, 12, 6, 21, 46, 39, 386, DateTimeKind.Local).AddTicks(4291),
-                            Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem",
-                            DueTo = new DateTime(2024, 12, 6, 21, 46, 39, 386, DateTimeKind.Local).AddTicks(4339),
-                            Name = "Dupa jasiu pierdzi stasiu... Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturie",
-                            Priority = 1,
-                            Status = 0
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreationDate = new DateTime(2024, 12, 6, 21, 46, 39, 386, DateTimeKind.Local).AddTicks(4341),
-                            Description = "Odrob prace domowa z matematyki i fizyki ",
-                            DueTo = new DateTime(2024, 12, 7, 21, 46, 39, 386, DateTimeKind.Local).AddTicks(4342),
-                            Name = "Praca domowa",
-                            Priority = 2,
-                            Status = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreationDate = new DateTime(2024, 12, 6, 21, 46, 39, 386, DateTimeKind.Local).AddTicks(4346),
-                            Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,",
-                            DueTo = new DateTime(2024, 12, 6, 21, 46, 39, 386, DateTimeKind.Local).AddTicks(4347),
-                            Name = "Przedszkole",
-                            Priority = 0,
-                            Status = 2
-                        });
                 });
 
             modelBuilder.Entity("AplikacjaDoPlanowaniaZadan.Server.DataModels.User", b =>

@@ -15,7 +15,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.DAL.EF
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<DataModels.Task>().HasData(
+            /*modelBuilder.Entity<DataModels.Task>().HasData(
                 new DataModels.Task
                 {
                     Id = 1,
@@ -43,7 +43,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.DAL.EF
                     Priority = Priority.Low,
                     DueTo = DateTime.Now
                 }
-               );
+               );*/
         }
     }
 }

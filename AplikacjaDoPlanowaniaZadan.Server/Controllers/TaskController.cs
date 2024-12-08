@@ -3,6 +3,11 @@ using AplikacjaDoPlanowaniaZadan.Server.DataModels;
 using Task = AplikacjaDoPlanowaniaZadan.Server.DataModels.Task;
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using System.Globalization;
+using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests;
+using Microsoft.Net.Http.Headers;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
+using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.DTO;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -20,24 +25,30 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpGet("todayTasks")]
         public IActionResult GetTodayTasks()
         {
+			// token, trzeba tego użyć wszędzie
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
 
-            var today = DateTime.Now.Date;
-            var todayTasks = _context.Tasks.Where(t => t.DueTo.Date == today).ToList();
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+            var todayTasks = _context.Tasks.Where(t => t.DueTo.Date == DateTime.Now.Date && t.List.UserId== user.Id).Select(x=> new
+            {
+                x.Id,
+                x.Name,
+                x.Description,
+                x.DueTo
+            });
             return Ok(todayTasks);
         }
 
-
-        
-        public class SaveTaskRequest
-        {
-            public string Name { get; set; }
-            public string Description { get; set; }
-            public int Priority { get; set; }
-            public string DueTo { get; set; }
-            public int ListId { get; set; }
-
-
-        }
         [HttpPost("saveTask")]
         public IActionResult SaveTask([FromBody] SaveTaskRequest request)
         {
@@ -45,10 +56,23 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             {
                 return BadRequest("Dane zadania są niepoprawne.");
             }
-
             try
             {
-                DateTime dateTime2 = DateTime.Parse(request.DueTo);
+				var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+				var handler = new JwtSecurityTokenHandler();
+				var decodedToken = handler.ReadJwtToken(token);
+				var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+				var user = _context.Users
+					.Where(user => user.Email == email)
+					.Include(user => user.Lists)
+					.FirstOrDefault();
+				if (user == null)
+				{
+					return BadRequest();
+				}
+
+				DateTime dateTime2 = DateTime.Parse(request.DueTo);
                 var task = new Task
                 {
                     Name = request.Name,
@@ -58,25 +82,50 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                     Status = Status.Planned,
                     ListId = request.ListId
                 };
+                
+				_context.Tasks.Add(task);
+				_context.SaveChanges();
 
-                _context.Tasks.Add(task);
-                _context.SaveChanges();
-
-               
-                return Ok(task);
+                var ret = _context.Lists.FirstOrDefault(y => y.Id == request.ListId).Tasks
+                .Where(x => x.Id == task.Id)
+                .Select(t => new
+                {
+                    t.Id,
+                    t.Name,
+                    t.Description,
+                    t.DueTo,
+                    t.CreationDate,
+                    t.Priority,
+                    t.Status
+                }).ToList();
+			    return Ok(ret);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Błąd podczas zapisywania zadania: " + ex.Message);
-                return StatusCode(500, "Wystąpił błąd podczas zapisywania zadania.");
-            }
-        }
+			catch (Exception ex)
+			{
+				Console.WriteLine("Błąd podczas zapisywania zadania: " + ex.Message);
+				return StatusCode(500, "Wystąpił błąd podczas zapisywania zadania.");
+			}
+		}
 
 
-        [HttpDelete("deleteTask")]
+		[HttpDelete("deleteTask")]
         public IActionResult DeleteTask([FromBody] int taskId)
         {
-            var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			var task = _context.Tasks.Where(x=>x.List.UserId == user.Id).FirstOrDefault(t => t.Id == taskId);
 
             if (task == null)
             {
@@ -95,36 +144,69 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         [HttpPost("getDayTasks")]
         public IActionResult GetDayTasks([FromBody] DateTime requestDate)
         {
+            var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
             var tasksForDay = _context.Tasks
                 .Where(t => t.DueTo.Date == requestDate.Date)  
                 .ToList();
 
-            if (tasksForDay == null || !tasksForDay.Any())
+            var tasks = tasksForDay.Where(x => user.Lists.Any(y=>y.Id == x.ListId)).Select(x => new
+			{
+				x.Id,
+				x.Name,
+				x.Description,
+				x.DueTo
+			});
+
+			if (tasks == null || !tasks.Any())
             {
                 return NotFound(new { message = "No tasks found for the given date." });
             }
 
-            return Ok(tasksForDay);  
+            return Ok(tasks);  
         }
 
-        public class MonthTaskRequest
-        {
-            public DateTime Date { get; set; }
-            public int DaysInMonth { get; set; }
-        }
+
 
         [HttpPost("getMonthTaskCounts")]
         public IActionResult GetMonthTaskCounts([FromBody] MonthTaskRequest request)
         {
-            var firstDayOfMonth = new DateTime(request.Date.Year, request.Date.Month, 1);
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			var firstDayOfMonth = new DateTime(request.Date.Year, request.Date.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
             var tasksInMonth = _context.Tasks
-                .Where(t => t.DueTo >= firstDayOfMonth && t.DueTo <= lastDayOfMonth)
+                .Where(t => t.DueTo >= firstDayOfMonth && t.DueTo <= lastDayOfMonth).Where(x=> user.Lists.Any(y=>y.Id == x.ListId))
                 .GroupBy(t => t.DueTo.Day)  
                 .ToList();
 
-            var taskCounts = tasksInMonth.ToDictionary(
+
+			var taskCounts = tasksInMonth.ToDictionary(
                 g => g.Key,  
                 g => g.Count()  
             );

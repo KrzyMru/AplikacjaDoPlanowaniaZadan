@@ -27,7 +27,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             _context = context;
         }
 
-        [HttpPost("saveList")]
+		//[Authorize]
+		[HttpPost("saveList")]
         public IActionResult saveList([FromBody] CreateListRequest request)
         {
             // token, trzeba tego użyć wszędzie
@@ -62,8 +63,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             newList.User = user;
             newList.UserId = user.Id;
 
-            var count = user.Lists.Count;
-
             _context.Lists.Add(newList);
             _context.Users.Update(user);
             _context.SaveChanges();
@@ -71,13 +70,27 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             return Ok(new ListDTO(newList));
         }
 
-
-        [HttpPost("getTaskList")]
+		//[Authorize]
+		[HttpPost("getTaskList")]
         public IActionResult getTaskList([FromBody] int listId)
         {
-            var list = _context.Lists
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			var list = _context.Lists
                 .Include(l => l.Tasks)
-                .Where(l => l.Id == listId)
+                .Where(l => l.Id == listId && l.UserId == user.Id)
                 .Select(l => new
                 {
                     l.Id,
@@ -105,12 +118,26 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         }
 
 
-
-        [HttpGet("getTaskListHeaders")]
+		//[Authorize]
+		[HttpGet("getTaskListHeaders")]
         public IActionResult getTaskListHeaders()
         {
-            var listHeaders = _context.Lists 
-                .FromSqlRaw("SELECT Id, Name, Color FROM Lists")
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			var listHeaders = _context.Lists
+                .Where(x=>x.UserId == user.Id)
                 .Select(l => new
                 {
                     l.Id,
@@ -122,16 +149,32 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             return Ok(listHeaders);
         }
 
-        [HttpPost("editList")]
+		//[Authorize]
+		[HttpPost("editList")]
         public IActionResult EditList([FromBody] List updatedList)
         {
-            if (updatedList == null || updatedList.Id <= 0)
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			if (updatedList == null || updatedList.Id <= 0)
             {
                 return BadRequest("List data is invalid.");
             }
 
             var existingList = _context.Lists
                 .Include(l => l.Tasks) 
+                .Where(user=> user.Id == updatedList.Id)
                 .FirstOrDefault(l => l.Id == updatedList.Id);
 
             if (existingList == null)
@@ -163,12 +206,26 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             });
         }
 
-
-        [HttpDelete("deleteList")]
+		//[Authorize]
+		[HttpDelete("deleteList")]
         public IActionResult deleteList([FromBody] int id)
         {
 
-            var list = _context.Lists.FirstOrDefault(l => l.Id == id);
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			var list = _context.Lists.Where(x=>x.UserId==user.Id).FirstOrDefault(l => l.Id == id);
 
             if (list == null)
             {
