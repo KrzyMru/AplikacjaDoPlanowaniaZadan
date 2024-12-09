@@ -2,7 +2,7 @@
 {
 	public class MonthTaskRequest
 	{
-		public DateTime Date { get; set; }
+		public string Date { get; set; }
 		public int DaysInMonth { get; set; }
 	}
 }

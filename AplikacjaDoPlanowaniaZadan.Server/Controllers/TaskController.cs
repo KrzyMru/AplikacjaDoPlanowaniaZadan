@@ -8,6 +8,9 @@ using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata.Ecma335;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Collections.Generic;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -46,6 +49,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 x.Description,
                 x.DueTo
             });
+
             return Ok(todayTasks);
         }
 
@@ -165,52 +169,45 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				x.DueTo
 			});
 
-			if (tasks == null || !tasks.Any())
-            {
-                return NotFound(new { message = "No tasks found for the given date." });
-            }
-
             return Ok(tasks);  
         }
 
 
 
-        [HttpPost("getMonthTaskCounts")]
-        public IActionResult GetMonthTaskCounts([FromBody] MonthTaskRequest request)
-        {
+		[HttpPost("getMonthTaskCounts")]
+		public IActionResult GetMonthTaskCounts([FromBody] MonthTaskRequest request)
+		{
 			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
 			var handler = new JwtSecurityTokenHandler();
 			var decodedToken = handler.ReadJwtToken(token);
 			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
-
 			var user = _context.Users
 				.Where(user => user.Email == email)
 				.Include(user => user.Lists)
 				.FirstOrDefault();
+
 			if (user == null)
 			{
 				return BadRequest();
 			}
 
-			var firstDayOfMonth = new DateTime(request.Date.Year, request.Date.Month, 1);
-            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+			string[] date = request.Date.Split("-");
+			var firstDayOfMonth = new DateTime(int.Parse(date[0]), int.Parse(date[1]), 1);
+			var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
-            var tasksInMonth = _context.Tasks
-                .Where(t => t.DueTo >= firstDayOfMonth && t.DueTo <= lastDayOfMonth).Where(x=> user.Lists.Any(y=>y.Id == x.ListId))
-                .GroupBy(t => t.DueTo.Value.Day)  
-                .ToList();
+			var tasksInMonth = _context.Tasks
+				.Where(x => user.Lists.Any(y => y.Id == x.ListId))
+				.Where(t => t.DueTo >= firstDayOfMonth && t.DueTo <= lastDayOfMonth)
+				.GroupBy(t => t.DueTo.Value.Day)
+				.ToDictionary(
+					g => g.Key,
+					g => g.Count()
+				);
 
+			return Ok(tasksInMonth);
+		}
 
-			var taskCounts = tasksInMonth.ToDictionary(
-                g => g.Key,  
-                g => g.Count()  
-            );
-
-            return Ok(taskCounts);
-        }
-
-
-        [HttpPost("toggleTask")]
+		[HttpPost("toggleTask")]
         public IActionResult ToggleTask([FromBody] int taskId)
         {
             var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
