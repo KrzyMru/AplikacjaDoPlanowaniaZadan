@@ -11,6 +11,7 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -181,22 +182,18 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			var handler = new JwtSecurityTokenHandler();
 			var decodedToken = handler.ReadJwtToken(token);
 			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
-			var user = _context.Users
-				.Where(user => user.Email == email)
-				.Include(user => user.Lists)
-				.FirstOrDefault();
 
-			if (user == null)
-			{
-				return BadRequest();
-			}
+			var userListIds = _context.Users
+				.Where(u => u.Email == email)
+				.SelectMany(u => u.Lists.Select(l => l.Id))
+				.ToList();
 
 			string[] date = request.Date.Split("-");
 			var firstDayOfMonth = new DateTime(int.Parse(date[0]), int.Parse(date[1]), 1);
 			var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
 
 			var tasksInMonth = _context.Tasks
-				.Where(x => user.Lists.Any(y => y.Id == x.ListId))
+				.Where(t => userListIds.Contains((int)t.ListId))
 				.Where(t => t.DueTo >= firstDayOfMonth && t.DueTo <= lastDayOfMonth)
 				.GroupBy(t => t.DueTo.Value.Day)
 				.ToDictionary(
