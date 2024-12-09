@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/AplikacjaDoPlanowaniaZadan.Server/Migrations/20241208235219_mg1.cs
