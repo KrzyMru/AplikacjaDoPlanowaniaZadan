@@ -49,7 +49,7 @@ export default function Calendar({ hidden, token }) {
                     "Content-Type": "application/json",
                     "Authorization": 'Bearer ' + token,
                 },
-                body: JSON.stringify(date?.format('YYYY-MM'), date?.daysInMonth()),
+                body: JSON.stringify({ date: date?.format('YYYY-MM'), daysInMonth: date?.daysInMonth() }),
             });
             if (!response.ok)
                 throw Error(response?.status);
