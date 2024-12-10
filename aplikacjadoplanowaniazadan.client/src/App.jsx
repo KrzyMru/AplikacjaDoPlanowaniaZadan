@@ -13,6 +13,14 @@ import NavigationBar from "./components/NavigationBar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
 
 function App() {
     return (
@@ -42,10 +50,43 @@ function MainComponent() {
             return item ? JSON.parse(item) : null;
         }
     );
+    const [settings, setSettings] = React.useState(
+        () => {
+            var item = sessionStorage.getItem("settings");
+            return item ? JSON.parse(item) :
+                [
+                    {
+                        name: "Dark mode",
+                        description: "Enable dark mode to reduce eye strain and enjoy a sleek, low-light interface.",
+                        value: false
+                    },
+                ]
+            ;
+        }    
+    );
+    const icons = {
+        internal:
+            [
+                { name: "Dark mode", icon: <DarkModeIcon fontSize='large' /> }
+            ],
+        user:
+            [
+                { name: "Task", icon: <TaskAltIcon /> },
+                { name: "Clock", icon: <AccessAlarmIcon /> },
+                { name: "Wallet", icon: <AccountBalanceWalletIcon /> },
+                { name: "Building", icon: <AccountBalanceIcon /> },
+                { name: "Cold", icon: <AcUnitIcon /> },
+                { name: "Location", icon: <LocationOnIcon /> },
+                { name: "City", icon: <LocationCityIcon /> },
+            ]
+    };
 
     React.useEffect(() => {
         sessionStorage.setItem("token", JSON.stringify(token));
     }, [token]);
+    React.useEffect(() => {
+        sessionStorage.setItem("settings", JSON.stringify(settings));
+    }, [settings]);
 
     const LogoutWrapper = ({ children }) => {
         React.useEffect(() => {
@@ -67,6 +108,9 @@ function MainComponent() {
                             <ProtectedRoute allowed={token !== null} redirectPath="/signIn">
                                 <Home
                                     token={token}
+                                    settings={settings}
+                                    setSettings={setSettings}
+                                    icons={icons}
                                 /> 
                             </ProtectedRoute>
                         }

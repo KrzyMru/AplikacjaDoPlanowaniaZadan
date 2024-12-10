@@ -7,7 +7,7 @@ import Calendar from "../components/screens/Calendar";
 import TaskList from "../components/screens/TaskList";
 import Notifications from "../components/screens/Notifications";
 
-const Home = ({ token }) => {
+const Home = ({ token, settings, setSettings, icons }) => {
     const [selected, setSelected] = React.useState("Today");
     const [taskListHeaders, setTaskListHeaders] = React.useState([]);
 
@@ -33,6 +33,9 @@ const Home = ({ token }) => {
                         handleSelect={handleSelect}
                         taskListHeaders={taskListHeaders}
                         setTaskListHeaders={setTaskListHeaders}
+                        settings={settings}
+                        setSettings={setSettings}
+                        icons={icons}
                     />
                     <Box sx={{ flexGrow: 1 }}>
                         <Today hidden={selected !== "Today"} token={token} />

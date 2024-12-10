@@ -1,10 +1,10 @@
 import React from "react";
-import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem, ListItemText, ListItemIcon } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import { MuiColorInput } from "mui-color-input";
 import { toast } from 'react-toastify';
 
-const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders }) => {
+const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders, icons }) => {
 
     const saveList = async (formData) => {
         setLoading(true);
@@ -33,7 +33,7 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders 
         }
     }
 
-    const [formData, setFormData] = React.useState({color: '#FFFACD'});
+    const [formData, setFormData] = React.useState({ color: '#FFFACD', icon: "Task" });
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
@@ -57,13 +57,41 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders 
             </DialogTitle>
             <Divider />
             <DialogContent>
-                <TextField name="name" label="Name" variant="outlined"
-                    fullWidth sx={{ mb: 2, mt: 2 }}
-                    onChange={(event) => {
-                        const { name, value } = event.target;
-                        setFormData((prev) => ({ ...prev, [name]: value }))
-                    }}
-                />
+                <Box sx={{ display: 'flex', flexWrap: 'noWrap', alignItems: 'center' }}>
+                    <TextField name="name" label="Name" variant="outlined"
+                        fullWidth sx={{ mb: 2, mt: 2, mr: 1, flexGrow: 1 }}
+                        onChange={(event) => {
+                            const { name, value } = event.target;
+                            setFormData((prev) => ({ ...prev, [name]: value }))
+                        }}
+                    />
+                    <FormControl sx={{ width: '80px', height: '56px' }}>
+                        <InputLabel>Icon</InputLabel>
+                        <Select
+                            value={formData?.icon}
+                            name="icon"
+                            label="Icon"
+                            onChange={(event) => {
+                                const { name, value } = event.target;
+                                setFormData((prev) => ({ ...prev, [name]: value }))
+                            }}
+                            sx={{ width: '80px', height: '56px', pt: 1 }}
+                            renderValue={(selected) => {
+                                return icons?.user?.find(icon => icon?.name === selected)?.icon;
+                            }}
+                        >
+                            {
+                                icons?.user?.map((icon) =>
+                                    <MenuItem value={icon?.name} key={icon?.name}>
+                                        <ListItemIcon>
+                                            {icon?.icon}
+                                        </ListItemIcon>
+                                        <ListItemText primary={icon?.name} />
+                                    </MenuItem>
+                                )}
+                        </Select>
+                    </FormControl>
+                </Box>
                 <TextField name="description" label="Description" variant="outlined"
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}

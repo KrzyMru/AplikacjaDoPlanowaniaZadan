@@ -18,8 +18,10 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskListHeaderSkeleton from './skeletons/TaskListHeaderSkeleton';
 import Typography from '@mui/material/Typography';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsIcon from '@mui/icons-material/Settings';
+import Settings from './dialogs/Settings';
 
-export default function SideBar({ token, handleSelect, taskListHeaders, setTaskListHeaders }) {
+export default function SideBar({ token, handleSelect, taskListHeaders, setTaskListHeaders, settings, setSettings, icons }) {
 
     React.useEffect(() => {
         getTaskListHeaders();
@@ -48,6 +50,7 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
 
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [openSettings, setOpenSettings] = React.useState(false);
     const [openCreateList, setOpenCreateList] = React.useState(false);
 
     const handleOpen = () => {
@@ -55,6 +58,12 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
     }
     const handleClose = () => {
         setOpen(false);
+    }
+    const handleOpenSettings = () => {
+        setOpenSettings(true);
+    }
+    const handleCloseSettings = () => {
+        setOpenSettings(false);
     }
     const handleOpenCreateList = () => {
         setOpenCreateList(true);
@@ -143,6 +152,38 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                 </List>
                 <Divider />
                 <Box sx={{ overflowY: 'hidden', flexGrow: 1, position: 'relative' }}>
+                    <ListItem key={"Settings"} disablePadding
+                        sx={{
+                            display: 'block',
+                            borderBottom: '0.5px solid', borderColor: 'divider',
+                        }}
+                        onClick={() => handleOpenSettings()}
+                    >
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                px: 2.5,
+                                width: open ? 200 : 'fit-content',
+                                justifyContent: open ? 'initial' : 'center',
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    justifyContent: 'center',
+                                    mr: open ? 3 : 'auto'
+                                }}
+                            >
+                                <SettingsIcon />
+                            </ListItemIcon>
+                            {
+                                open &&
+                                <ListItemText
+                                    primary={"Settings"}
+                                />
+                            }
+                        </ListItemButton>
+                    </ListItem>
                     <ListItem key={"CreateList"} disablePadding
                         sx={{
                             display: 'block',
@@ -180,6 +221,7 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                             overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
                             maxHeight: `100%`, minHeight: `100%`,
                             width: '-webkit-fill-available',
+                            backgroundColor: '#f7f7f7'
                         }}
                     >
                         {
@@ -206,8 +248,12 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                                                 mr: open ? 3 : 'auto'
                                             }}
                                         >
-                                            <ListIcon />
-                                            {/*{list?.icon}*/}
+                                            {
+                                                list?.icon !== null && list?.icon !== undefined ?
+                                                    icons?.find(icon => icon.name === list.icon)?.icon ?? <ListIcon />
+                                                    :
+                                                    <ListIcon />
+                                            }
                                         </ListItemIcon>
                                         {
                                             open &&
@@ -234,6 +280,15 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                 token={token}
                 taskListHeaders={taskListHeaders}
                 setTaskListHeaders={setTaskListHeaders}
+                icons={icons}
+            />
+
+            <Settings
+                open={openSettings}
+                onClose={handleCloseSettings}
+                settings={settings}
+                setSettings={setSettings}
+                icons={icons}
             />
         </React.Fragment >
     );
