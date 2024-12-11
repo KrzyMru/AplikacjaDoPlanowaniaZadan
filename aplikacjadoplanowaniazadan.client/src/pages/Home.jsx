@@ -38,15 +38,28 @@ const Home = ({ token, settings, setSettings, icons }) => {
                         icons={icons}
                     />
                     <Box sx={{ flexGrow: 1 }}>
-                        <Today hidden={selected !== "Today"} token={token} />
-                        <Calendar hidden={selected !== "Calendar"} token={token} />
-                        <Notifications hidden={selected !== "Notifications"} token={token} />
+                        <Today
+                            hidden={selected !== "Today"}
+                            token={token}
+                            handleSelect={handleSelect}
+                            icons={icons}
+                        />
+                        <Calendar
+                            hidden={selected !== "Calendar"}
+                            token={token}
+                            handleSelect={handleSelect}
+                            icons={icons}
+                        />
+                        <Notifications
+                            hidden={selected !== "Notifications"}
+                            token={token}
+                        />
                         <TaskList hidden={isNaN(+selected)}
                             token={token}
                             listId={+selected}
-                            setSelected={setSelected}
                             taskListHeaders={taskListHeaders}
                             setTaskListHeaders={setTaskListHeaders}
+                            handleSelect={handleSelect}
                             icons={icons}
                         />
                     </Box>

@@ -38,7 +38,7 @@ function DayWithBadge(props) {
     );
 }
 
-export default function Calendar({ hidden, token }) {
+export default function Calendar({ hidden, token, handleSelect, icons }) {
 
     const getMonthTaskCounts = async (date) => {
         setLoadingCalendar(true);
@@ -220,6 +220,8 @@ export default function Calendar({ hidden, token }) {
                                         toggleTask={toggleTask}
                                         deleteTask={deleteTask}
                                         loadingAction={loadingTaskAction}
+                                        handleSelect={handleSelect}
+                                        icons={icons}
                                     />
                                 </Paper>
                             ))

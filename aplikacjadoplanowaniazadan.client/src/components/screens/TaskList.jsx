@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import EditList from '../dialogs/EditList';
 import { toast } from 'react-toastify';
 
-export default function TaskList({ hidden, token, listId, setSelected, taskListHeaders, setTaskListHeaders, icons }) {
+export default function TaskList({ hidden, token, listId, taskListHeaders, setTaskListHeaders, handleSelect, icons }) {
 
     React.useEffect(() => {
         if (!hidden)
@@ -118,7 +118,7 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
             });
             if (!response.ok)
                 throw Error(response?.status);
-            setSelected("Today");
+            handleSelect("Today");
             setTaskListHeaders(taskListHeaders?.filter(tsklst => tsklst?.id !== listId));
             toast("List deleted successfully.", {
                 theme: "light",
@@ -236,6 +236,8 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
                                     toggleTask={toggleTask}
                                     deleteTask={deleteTask}
                                     loadingAction={loadingTaskAction}
+                                    handleSelect={handleSelect}
+                                    icons={icons}
                                 />
                             </Paper>
                         ))}

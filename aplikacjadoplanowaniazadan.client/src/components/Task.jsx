@@ -16,8 +16,9 @@ import { CircularProgress } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import TaskInfo from './dialogs/TaskInfo';
 import FlagIcon from '@mui/icons-material/Flag';
+import ListIcon from '@mui/icons-material/List';
 
-export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
+export default function Task({ task, toggleTask, deleteTask, loadingAction, handleSelect, icons }) {
 
     const [openInfo, setOpenInfo] = React.useState(null);
 
@@ -57,7 +58,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
                         }}
                     />
                 </Tooltip>
-                <ListItemIcon sx={{ justifyContent: 'center' }}>
+                <ListItemIcon sx={{ justifyContent: 'center', mr: { xs: 0, sm: "28px" } }}>
                     <Checkbox
                         edge="start"
                         checked={task?.status == 2}
@@ -66,6 +67,36 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction }) {
                         onClick={() => handleToggleTask(task?.id)}
                     />
                 </ListItemIcon>
+                <ListItemButton
+                    sx={{
+                        pr: 1, transform: "rotate(90deg)",
+                        position: 'absolute',
+                        left: '40px', top: '36px',
+                        p: 0, width: '96px',
+                        backgroundColor: task?.listColor ?? '#dbd7d7',
+                        display: { xs: "none", sm: "-webkit-flex" }
+                    }}
+                    onClick={() => handleSelect(task?.listId)}
+                >
+                    <ListItemIcon sx={{ minWidth: '4px', mr: '4px' }}>
+                        {
+                            task?.listIcon !== null && task?.listIcon !== undefined ?
+                                icons?.user?.find(icon => icon.name === task?.listIcon)?.icon ?? <ListIcon />
+                                :
+                                <ListIcon />
+                        }
+                    </ListItemIcon>
+                    <Typography sx={{
+                        flexGrow: 1, maxHeight: '24px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 1,
+                        WebkitBoxOrient: 'vertical'
+                    }}>
+                        {task?.listName ?? "List"}
+                    </Typography>
+                </ListItemButton>
                 <ListItemButton sx={{ pr: 1 }}
                     onClick={() => handleOpenInfo(task)}
                 >

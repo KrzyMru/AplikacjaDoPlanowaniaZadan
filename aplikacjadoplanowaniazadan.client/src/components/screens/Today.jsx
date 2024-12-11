@@ -8,7 +8,7 @@ import Task from '../Task';
 import TaskListSkeleton from '../skeletons/TaskListSkeleton';
 import { toast } from 'react-toastify';
 
-export default function Today({ hidden, token }) {
+export default function Today({ hidden, token, handleSelect, icons }) {
 
     React.useEffect(() => {
         if (!hidden)
@@ -139,6 +139,8 @@ export default function Today({ hidden, token }) {
                                 toggleTask={toggleTask}
                                 deleteTask={deleteTask}
                                 loadingAction={loadingAction}
+                                icons={icons}
+                                handleSelect={handleSelect}
                             />
                         </Paper>
                     ))}
