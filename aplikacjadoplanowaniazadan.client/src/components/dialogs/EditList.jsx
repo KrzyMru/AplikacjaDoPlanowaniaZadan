@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogTitle, DialogActions, Divider, TextField, Button, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem, ListItemText, ListItemIcon } from "@mui/material";
 import SaveIcon from '@mui/icons-material/Save';
 import { MuiColorInput } from "mui-color-input";
 
-const EditList = ({ open, onClose, taskList, editList }) => {
+const EditList = ({ open, onClose, taskList, editList, icons }) => {
 
     const [formData, setFormData] = React.useState(taskList);
     const [loading, setLoading] = React.useState(false);
@@ -37,14 +37,41 @@ const EditList = ({ open, onClose, taskList, editList }) => {
             </DialogTitle>
             <Divider />
             <DialogContent>
-                <TextField name="name" label="Name" variant="outlined"
-                    defaultValue={formData?.name}
-                    fullWidth sx={{ mb: 2, mt: 2 }}
-                    onChange={(event) => {
-                        const { name, value } = event.target;
-                        setFormData((prev) => ({ ...prev, [name]: value }))
-                    }}
-                />
+                <Box sx={{ display: 'flex', flexWrap: 'noWrap', alignItems: 'center' }}>
+                    <TextField name="name" label="Name" variant="outlined"
+                        fullWidth sx={{ mb: 2, mt: 2, mr: 1, flexGrow: 1 }}
+                        onChange={(event) => {
+                            const { name, value } = event.target;
+                            setFormData((prev) => ({ ...prev, [name]: value }))
+                        }}
+                    />
+                    <FormControl sx={{ width: '80px', height: '56px', mr: '12px' }}>
+                        <InputLabel>Icon</InputLabel>
+                        <Select
+                            value={formData?.icon ?? "Task"}
+                            name="icon"
+                            label="Icon"
+                            onChange={(event) => {
+                                const { name, value } = event.target;
+                                setFormData((prev) => ({ ...prev, [name]: value }))
+                            }}
+                            sx={{ width: '80px', height: '56px', pt: 1, mr: '12px' }}
+                            renderValue={(selected) => {
+                                return icons?.user?.find(icon => icon?.name === selected)?.icon;
+                            }}
+                        >
+                            {
+                                icons?.user?.map((icon) =>
+                                    <MenuItem value={icon?.name} key={icon?.name}>
+                                        <ListItemIcon>
+                                            {icon?.icon}
+                                        </ListItemIcon>
+                                        <ListItemText primary={icon?.name} />
+                                    </MenuItem>
+                                )}
+                        </Select>
+                    </FormControl>
+                </Box>
                 <TextField name="description" label="Description" variant="outlined"
                     defaultValue={formData?.description}
                     multiline minRows={6} maxRows={6}

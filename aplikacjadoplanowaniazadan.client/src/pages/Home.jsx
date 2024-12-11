@@ -47,6 +47,7 @@ const Home = ({ token, settings, setSettings, icons }) => {
                             setSelected={setSelected}
                             taskListHeaders={taskListHeaders}
                             setTaskListHeaders={setTaskListHeaders}
+                            icons={icons}
                         />
                     </Box>
                 </Paper>

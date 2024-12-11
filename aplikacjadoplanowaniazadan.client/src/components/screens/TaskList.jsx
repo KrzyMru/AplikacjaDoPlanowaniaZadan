@@ -14,7 +14,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import EditList from '../dialogs/EditList';
 import { toast } from 'react-toastify';
 
-export default function TaskList({ hidden, token, listId, setSelected, taskListHeaders, setTaskListHeaders }) {
+export default function TaskList({ hidden, token, listId, setSelected, taskListHeaders, setTaskListHeaders, icons }) {
 
     React.useEffect(() => {
         if (!hidden)
@@ -257,6 +257,7 @@ export default function TaskList({ hidden, token, listId, setSelected, taskListH
                 onClose={handleCloseEditList}
                 taskList={taskList}
                 editList={editList}
+                icons={icons}
             />
         </React.Fragment>
     );

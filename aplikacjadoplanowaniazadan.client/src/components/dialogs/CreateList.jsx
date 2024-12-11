@@ -65,7 +65,7 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
                             setFormData((prev) => ({ ...prev, [name]: value }))
                         }}
                     />
-                    <FormControl sx={{ width: '80px', height: '56px' }}>
+                    <FormControl sx={{ width: '80px', height: '56px', mr: '12px' }}>
                         <InputLabel>Icon</InputLabel>
                         <Select
                             value={formData?.icon}
@@ -75,7 +75,7 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
                                 const { name, value } = event.target;
                                 setFormData((prev) => ({ ...prev, [name]: value }))
                             }}
-                            sx={{ width: '80px', height: '56px', pt: 1 }}
+                            sx={{ width: '80px', height: '56px', pt: 1, mr: '12px' }}
                             renderValue={(selected) => {
                                 return icons?.user?.find(icon => icon?.name === selected)?.icon;
                             }}

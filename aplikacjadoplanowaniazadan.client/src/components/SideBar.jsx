@@ -250,7 +250,7 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                                         >
                                             {
                                                 list?.icon !== null && list?.icon !== undefined ?
-                                                    icons?.find(icon => icon.name === list.icon)?.icon ?? <ListIcon />
+                                                    icons?.user?.find(icon => icon.name === list.icon)?.icon ?? <ListIcon />
                                                     :
                                                     <ListIcon />
                                             }
