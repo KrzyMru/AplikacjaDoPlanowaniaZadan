@@ -6,6 +6,8 @@ import Today from "../components/screens/Today";
 import Calendar from "../components/screens/Calendar";
 import TaskList from "../components/screens/TaskList";
 import Notifications from "../components/screens/Notifications";
+import CoverLight from '../assets/coverLight.jpg';
+import CoverDark from '../assets/coverDark.jpg';
 
 const Home = ({ token, settings, setSettings, icons }) => {
     const [selected, setSelected] = React.useState("Today");
@@ -16,7 +18,18 @@ const Home = ({ token, settings, setSettings, icons }) => {
     }
 
     return (
-        <Grid container sx={{ flexGrow: 1, overflow: 'hidden' }}>
+        <Grid container
+            sx={[(theme) => ({
+                    flexGrow: 1, overflow: 'hidden',
+                    backgroundImage: `url(${CoverLight})`,
+                    backgroundSize: 'cover',
+                    ...theme.applyStyles('dark', {
+                        backgroundColor: 'rgba(60, 60, 60, 1)',
+                        backgroundImage: `url(${CoverDark})`,
+                    }),
+                }),
+            ]}
+        >
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Paper elevation={24}
                     sx={{
@@ -30,6 +43,7 @@ const Home = ({ token, settings, setSettings, icons }) => {
                 >
                     <SideBar
                         token={token}
+                        selected={selected}
                         handleSelect={handleSelect}
                         taskListHeaders={taskListHeaders}
                         setTaskListHeaders={setTaskListHeaders}

@@ -110,12 +110,28 @@ export default function Today({ hidden, token, handleSelect, icons }) {
             }}
         >
             <Typography variant='h5' align='center'
-                sx={{ my: 2, mx: 6, py: 1 }}
+                sx={[(theme) => ({
+                        py: 3, px: 6,
+                        backgroundColor: '#f0fdff',
+                        ...theme.applyStyles('dark', {
+                            backgroundColor: '#353535',
+                        }),
+                    }),
+                ]}
             >
                 {"Today"}
             </Typography>
             <Divider variant="middle" />
-            <Box sx={{ overflowY: 'hidden', flexGrow: 1, position: 'relative' }}>
+            <Box
+                sx={[(theme) => ({
+                        overflowY: 'hidden', flexGrow: 1, position: 'relative',
+                        backgroundColor: '#f5ffff',
+                        ...theme.applyStyles('dark', {
+                            backgroundColor: '#3d3c39',
+                        }),
+                    }),
+                ]}
+            >
                 <List
                     sx={{
                         m: 1, overflowY: 'auto', px: 2, position: 'absolute',

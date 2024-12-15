@@ -21,7 +21,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Settings from './dialogs/Settings';
 
-export default function SideBar({ token, handleSelect, taskListHeaders, setTaskListHeaders, settings, setSettings, icons }) {
+export default function SideBar({ token, selected, handleSelect, taskListHeaders, setTaskListHeaders, settings, setSettings, icons }) {
 
     React.useEffect(() => {
         getTaskListHeaders();
@@ -90,15 +90,19 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
 
     return (
         <React.Fragment>
-
             <Drawer variant="permanent" open={open}
                 PaperProps={{
-                    style: {
-                        position: "relative", 
-                        width: 'fit-content',
-                    }
+                    sx: [(theme) => ({
+                            position: "relative",
+                            width: 'fit-content',
+                            backgroundColor: '#fbf8f0',
+                            ...theme.applyStyles('dark', {
+                                backgroundColor: '#43423f',
+                            }),
+                        })
+                    ]
                 }}
-                sx={{ width: 'fit-content' }}  
+                sx={{ width: 'fit-content' }}
             >
                 <Box
                     sx={{
@@ -117,10 +121,18 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                     </IconButton>
                 </Box>
                 <Divider />
-                <List>
+                <List sx={{ p: 0 }}>
                     {
                         screens?.map((screen) => (
-                            <ListItem key={screen?.name} disablePadding sx={{ display: 'block' }}
+                            <ListItem key={screen?.name} disablePadding
+                                sx={[(theme) => ({
+                                        display: 'block',
+                                        backgroundColor: selected === screen?.name ? '#fff0d4' : undefined,
+                                        ...theme.applyStyles('dark', {
+                                            backgroundColor: selected === screen?.name ? '#343539' : undefined,
+                                        }),
+                                    }),
+                                ]}
                                 onClick={() => handleSelect(screen?.name)}
                             >
                                 <ListItemButton
@@ -221,7 +233,7 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                                 overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
                                 maxHeight: `100%`, minHeight: `100%`,
                                 width: '-webkit-fill-available',
-                                backgroundColor: '#f7f7f7',
+                                backgroundColor: '#e9e6de',
                                 ...theme.applyStyles('dark', {
                                     backgroundColor: '#414141',
                                 }),

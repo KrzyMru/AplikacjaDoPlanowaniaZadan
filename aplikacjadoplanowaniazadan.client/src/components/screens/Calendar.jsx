@@ -169,12 +169,17 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
 
     return (
         <Box 
-            sx={{
-                display: hidden ? 'none' : 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                justifyContent: 'start',
-            }}
+            sx={[(theme) => ({
+                    display: hidden ? 'none' : 'flex',
+                    flexDirection: 'column',
+                    height: '100%',
+                    justifyContent: 'start',
+                    backgroundColor: '#f5ffff',
+                    ...theme.applyStyles('dark', {
+                        backgroundColor: '#3d3c39',
+                    }),
+                }),
+            ]}
         >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateCalendar
