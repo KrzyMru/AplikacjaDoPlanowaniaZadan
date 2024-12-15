@@ -11,6 +11,7 @@ import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import NavigationBar from "./components/NavigationBar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -71,15 +72,17 @@ function MainComponent() {
             ],
         user:
             [
-                { name: "Task", icon: <TaskAltIcon /> },
-                { name: "Clock", icon: <AccessAlarmIcon /> },
-                { name: "Wallet", icon: <AccountBalanceWalletIcon /> },
-                { name: "Building", icon: <AccountBalanceIcon /> },
-                { name: "Cold", icon: <AcUnitIcon /> },
-                { name: "Location", icon: <LocationOnIcon /> },
-                { name: "City", icon: <LocationCityIcon /> },
+                { name: "Task", icon: <TaskAltIcon sx={{ color: '#0000008a' }} /> },
+                { name: "Clock", icon: <AccessAlarmIcon sx={{ color: '#0000008a' }} /> },
+                { name: "Wallet", icon: <AccountBalanceWalletIcon sx={{ color: '#0000008a' }} /> },
+                { name: "Building", icon: <AccountBalanceIcon sx={{ color: '#0000008a' }} /> },
+                { name: "Cold", icon: <AcUnitIcon sx={{ color: '#0000008a' }} /> },
+                { name: "Location", icon: <LocationOnIcon sx={{ color: '#0000008a' }} /> },
+                { name: "City", icon: <LocationCityIcon sx={{ color: '#0000008a' }} /> },
             ]
     };
+
+
 
     React.useEffect(() => {
         sessionStorage.setItem("token", JSON.stringify(token));
@@ -95,58 +98,66 @@ function MainComponent() {
         return children;
     };
 
-    return (
-        <BrowserRouter>
-            <Box sx={{ display: "flex", flexDirection: 'column', flexWrap: 'no-wrap', height: "100vh", width: "100vw" }}>	
-                <NavigationBar
-                    token={token}
-                />
-                <Routes>
-                    <Route
-                        path="/"
-                        element={
-                            <ProtectedRoute allowed={token !== null} redirectPath="/signIn">
-                                <Home
-                                    token={token}
-                                    settings={settings}
-                                    setSettings={setSettings}
-                                    icons={icons}
-                                /> 
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/signUp"
-                        element={
-                            <ProtectedRoute allowed={token == null}>
-                                <SignUp />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/signIn"
-                        element={
-                            <ProtectedRoute allowed={token == null}>
-                                <SignIn
-                                    setToken={setToken}
-                                />
-                            </ProtectedRoute>
-                        }
-                    />   
-                    <Route
-                        path="/signOut"
-                        element={
-                            <ProtectedRoute allowed={token !== null}>
-                                <LogoutWrapper>
-                                    <Navigate to="/" replace />
-                                </LogoutWrapper>
-                            </ProtectedRoute>
-                        }
-                    />
-                </Routes>
-            </Box>
-        </BrowserRouter>
+    const theme = createTheme({
+        palette: {
+            mode: settings?.find(st => st?.name === "Dark mode")?.value ? 'dark' : 'light',
+        },
         
+    });
+
+    return (
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <Box sx={{ display: "flex", flexDirection: 'column', flexWrap: 'no-wrap', height: "100vh", width: "100vw" }}>	
+                    <NavigationBar
+                        token={token}
+                    />
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <ProtectedRoute allowed={token !== null} redirectPath="/signIn">
+                                    <Home
+                                        token={token}
+                                        settings={settings}
+                                        setSettings={setSettings}
+                                        icons={icons}
+                                    /> 
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/signUp"
+                            element={
+                                <ProtectedRoute allowed={token == null}>
+                                    <SignUp />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path="/signIn"
+                            element={
+                                <ProtectedRoute allowed={token == null}>
+                                    <SignIn
+                                        setToken={setToken}
+                                    />
+                                </ProtectedRoute>
+                            }
+                        />   
+                        <Route
+                            path="/signOut"
+                            element={
+                                <ProtectedRoute allowed={token !== null}>
+                                    <LogoutWrapper>
+                                        <Navigate to="/" replace />
+                                    </LogoutWrapper>
+                                </ProtectedRoute>
+                            }
+                        />
+                    </Routes>
+                </Box>
+            </BrowserRouter>
+        </ThemeProvider>
     );
 }
 

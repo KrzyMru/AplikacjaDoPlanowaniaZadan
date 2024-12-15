@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Grid, Typography, Paper, Alert, CircularProgress } from '@mui/material';
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
+import Link from "@mui/material/Link";
 import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
@@ -165,7 +166,7 @@ const SignUp = () => {
                             )}
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                            <Link to="/signIn" variant="body2">
+                            <Link to="/signIn" variant="body2" component={RouterLink}>
                                 {"Already have an account? Sign In"}
                             </Link>
                         </Box>

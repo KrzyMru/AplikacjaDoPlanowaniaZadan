@@ -216,13 +216,17 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                             }
                         </ListItemButton>
                     </ListItem>
-                    <List
-                        sx={{
-                            overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
-                            maxHeight: `100%`, minHeight: `100%`,
-                            width: '-webkit-fill-available',
-                            backgroundColor: '#f7f7f7'
-                        }}
+                    <List 
+                        sx={[(theme) => ({
+                                overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
+                                maxHeight: `100%`, minHeight: `100%`,
+                                width: '-webkit-fill-available',
+                                backgroundColor: '#f7f7f7',
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: '#414141',
+                                }),
+                            }),
+                        ]}
                     >
                         {
                             loading ?
@@ -230,7 +234,13 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                             :
                             taskListHeaders?.map((list) => (
                                 <ListItem key={list?.id} disablePadding
-                                    sx={{ display: 'block', backgroundColor: list?.color }}
+                                    sx={[(theme) => ({
+                                            display: 'block', backgroundColor: list?.color,
+                                            ...theme.applyStyles('dark', {
+                                                backgroundColor: list?.color + 'd1',
+                                            }),
+                                        }),
+                                    ]}
                                     onClick={() => handleSelect(list?.id)}
                                 >
                                     <ListItemButton
@@ -258,12 +268,16 @@ export default function SideBar({ token, handleSelect, taskListHeaders, setTaskL
                                         {
                                             open &&
                                             <ListItemText
-                                                sx={{
-                                                    overflow: 'hidden',
-                                                    display: '-webkit-box',
-                                                    WebkitBoxOrient: 'vertical',                                          
-                                                    WebkitLineClamp: '1',
-                                                }}
+                                                sx={[(theme) => ({
+                                                        overflow: 'hidden',
+                                                        display: '-webkit-box',
+                                                        WebkitBoxOrient: 'vertical',
+                                                        WebkitLineClamp: '1',
+                                                        ...theme.applyStyles('dark', {
+                                                            color: '#0000008a',
+                                                        }),
+                                                    }),
+                                                ]}
                                                 primary={list?.name}
                                             />
                                         }

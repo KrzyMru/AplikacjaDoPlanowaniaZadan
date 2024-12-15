@@ -37,15 +37,23 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
 
     return (
         <React.Fragment>
-            <ListItem
-                sx={{
-                    position: 'relative',
-                    minHeight: 96, maxHeight: 96,
-                    backgroundColor:
-                        task?.status === 0 ? '#dceef3' :
-                        task?.status === 1 ? '#ffc6c6' :
-                        '#ccedcc'
-                }}
+            <ListItem   
+                sx={[(theme) => ({
+                        position: 'relative',
+                        minHeight: 96, maxHeight: 96,
+                        backgroundColor:
+                            task?.status === 0 ? '#dceef3' :
+                            task?.status === 1 ? '#ffc6c6' :
+                                '#ccedcc',
+                        borderRadius: 1,
+                        ...theme.applyStyles('dark', {
+                            backgroundColor:
+                                task?.status === 0 ? '#8fabb3' :
+                                task?.status === 1 ? '#a57575' :
+                                    '#758d75',
+                        }),
+                    }),
+                ]}
             >
                 <Tooltip title={(task?.priority === 0 ? "Low" : task?.priority === 1 ? "Medium" : "High") + " priority"}>
                     <FlagIcon
@@ -86,14 +94,20 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                                 <ListIcon />
                         }
                     </ListItemIcon>
-                    <Typography sx={{
-                        flexGrow: 1, maxHeight: '24px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitLineClamp: 1,
-                        WebkitBoxOrient: 'vertical'
-                    }}>
+                    <Typography 
+                        sx={[(theme) => ({
+                                flexGrow: 1, maxHeight: '24px',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 1,
+                                WebkitBoxOrient: 'vertical',
+                                ...theme.applyStyles('dark', {
+                                    color: '#0000008a',
+                                }),
+                            }),
+                        ]}
+                    >
                         {task?.listName ?? "List"}
                     </Typography>
                 </ListItemButton>

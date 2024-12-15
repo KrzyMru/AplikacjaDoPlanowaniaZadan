@@ -62,16 +62,24 @@ const TaskInfo = ({ open, onClose, task }) => {
                     <Typography>{(task?.priority === 0 ? "Low" : task?.priority === 1 ? "Medium" : "High") + " priority"}</Typography>
                 </Box>
                 <Box
-                    sx={{
-                        display: task?.dueTo ? 'flex' : 'none',
-                        justifyContent: 'space-around',
-                        mb: '20px',
-                        backgroundColor:
-                            task?.status === 0 ? '#dceef3' :
-                            task?.status === 1 ? '#ffc6c6' :
+                    sx={[(theme) => ({
+                            display: task?.dueTo ? 'flex' : 'none',
+                            justifyContent: 'space-around',
+                            mb: '20px',
+                            backgroundColor:
+                                task?.status === 0 ? '#dceef3' :
+                                task?.status === 1 ? '#ffc6c6' :
                                     '#ccedcc',
-                        borderRadius: 1
-                    }}>
+                            borderRadius: 1,
+                            ...theme.applyStyles('dark', {
+                                backgroundColor:
+                                    task?.status === 0 ? '#8fabb3' :
+                                    task?.status === 1 ? '#a57575' :
+                                        '#758d75',
+                            }),
+                        }),
+                    ]}
+                >
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant="overline" align="center">
                             {"Created"}

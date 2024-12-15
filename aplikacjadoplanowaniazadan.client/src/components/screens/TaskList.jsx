@@ -190,7 +190,13 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                 }}
             >
                 <Typography variant='h5' align='center'
-                    sx={{ py: 3, px: 6, backgroundColor: taskList?.color }}
+                    sx={[(theme) => ({
+                            py: 3, px: 6, backgroundColor: taskList?.color,
+                            ...theme.applyStyles('dark', {
+                                backgroundColor: taskList?.color + 'd1',
+                            }),
+                        }),
+                    ]}
                 >
                     {loadingList ? <LinearProgress sx={{ p: '2px', m: '12px' }} /> : taskList?.name}
                 </Typography>
