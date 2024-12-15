@@ -55,6 +55,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 Name = request.Name,
                 Description = request.Description,
                 Color = request.Color,
+                Icon = request.Icon,
                 Tasks = new List<Task>()
             };
 
@@ -87,7 +88,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				return BadRequest();
 			}
 
-			var list = _context.Lists
+            var list = _context.Lists
                 .Include(l => l.Tasks)
                 .Where(l => l.Id == listId && l.UserId == user.Id)
                 .Select(l => new
@@ -96,15 +97,21 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                     l.Name,
                     l.Description,
                     l.Color,
+                    l.Icon,
                     Tasks = l.Tasks.Select(t => new
                     {
-                        t.Id,
-                        t.Name,
-                        t.Description,
-                        t.DueTo,
-                        t.Priority,
-                        t.Status
-                    }).ToList()
+						ListId = t.List.Id,
+						ListName = t.List.Name,
+						ListColor = t.List.Color,
+						ListIcon = t.List.Icon,
+						t.Id,
+						t.Name,
+						t.Description,
+						t.DueTo,
+						t.CreationDate,
+						t.Status,
+						t.Priority
+					}).ToList()
                 })
                 .FirstOrDefault();
 
@@ -141,7 +148,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 {
                     l.Id,
                     l.Name,
-                    l.Color
+                    l.Color,
+                    l.Icon
                 })
                 .ToList();
 
@@ -172,7 +180,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             }
 
             var existingList = _context.Lists
-                .Include(l => l.Tasks) 
                 .Where(user=> user.Id == updatedList.Id)
                 .FirstOrDefault(l => l.Id == updatedList.Id);
 
@@ -184,25 +191,32 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             existingList.Name = updatedList.Name;
             existingList.Description = updatedList.Description;
             existingList.Color = updatedList.Color;
+            existingList.Icon = updatedList.Icon;
 
+            _context.Update(existingList);
             _context.SaveChanges();
 
-            return Ok(new
-            {
-                Id = existingList.Id,
-                Name = existingList.Name,
-                Description = existingList.Description,
-                Color = existingList.Color,
-                Tasks = existingList.Tasks.Select(t => new
-                {
-                    t.Id,
-                    t.Name,
-                    t.Description,
-                    t.DueTo,
-                    Priority = (int)t.Priority, 
-                    Status = (int)t.Status 
-                }).ToList()
-            });
+            var ret = _context.Lists.Where(x=>x.Id == existingList.Id).Select(l => new
+			{
+				l.Id,
+				l.Name,
+				l.Description,
+				l.Color,
+				l.Icon,
+				Tasks = l.Tasks.Select(t => new
+				{
+					t.Id,
+					t.Name,
+					t.Description,
+					t.DueTo,
+					t.Priority,
+					t.Status,
+					t.CreationDate
+				}).ToList()
+			}).FirstOrDefault();
+
+
+			return Ok(ret);
         }
 
 		//[Authorize]

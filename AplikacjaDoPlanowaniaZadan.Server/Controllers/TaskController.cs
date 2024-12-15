@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Collections.Generic;
 using System.Linq;
+using AplikacjaDoPlanowaniaZadan.Server.Migrations;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -43,15 +44,27 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			{
 				return BadRequest();
 			}
-            var todayTasks = _context.Tasks.Where(t => t.DueTo.Value.Date == DateTime.Now.Date && t.List.UserId== user.Id).Select(x=> new
-            {
-                x.Id,
-                x.Name,
-                x.Description,
-                x.DueTo
-            });
 
-            return Ok(todayTasks);
+			var tasksWithFlattenedListDetails = _context.Tasks
+				.Where(t => t.DueTo.Value.Date == DateTime.Today.Date && t.List.UserId == user.Id)
+				.Include(t => t.List)
+				.Select(t => new
+				{
+					ListId = t.List.Id,
+					ListName = t.List.Name,
+					ListColor = t.List.Color,
+					ListIcon = t.List.Icon,
+					t.Id,
+					t.Name,
+					t.Description,
+					t.DueTo,
+					t.CreationDate,
+					t.Status,
+					t.Priority
+				})
+				.ToList();
+
+			return Ok(tasksWithFlattenedListDetails);
         }
 
         [HttpPost("saveTask")]
@@ -158,19 +171,28 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				return BadRequest();
 			}
 
-            var tasksForDay = _context.Tasks
-                .Where(t => t.DueTo.Value.Date == requestDate.Date)  
-                .ToList();
+			var tasksWithFlattenedListDetails = _context.Tasks
+				.Where(t => t.DueTo.Value.Date == requestDate.Date && t.List.UserId == user.Id)
+				.Include(t => t.List)
+				.Select(t => new
+				{
+					ListId = t.List.Id,
+					ListName = t.List.Name,
+					ListColor = t.List.Color,
+					ListIcon = t.List.Icon,
+					t.Id,
+					t.Name,
+					t.Description,
+					t.DueTo,
+					t.CreationDate,
+					t.Status,
+					t.Priority
+				})
+				.ToList();
 
-            var tasks = tasksForDay.Where(x => user.Lists.Any(y=>y.Id == x.ListId)).Select(x => new
-			{
-				x.Id,
-				x.Name,
-				x.Description,
-				x.DueTo
-			});
 
-            return Ok(tasks);  
+
+			return Ok(tasksWithFlattenedListDetails);  
         }
 
 

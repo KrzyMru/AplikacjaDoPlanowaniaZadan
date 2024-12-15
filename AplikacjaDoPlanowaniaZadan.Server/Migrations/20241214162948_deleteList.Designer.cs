@@ -4,6 +4,7 @@ using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241214162948_deleteList")]
+    partial class deleteList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,10 +38,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Icon")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -149,7 +148,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
                     b.HasOne("AplikacjaDoPlanowaniaZadan.Server.DataModels.User", "User")
                         .WithMany("Lists")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("User");
                 });
@@ -169,8 +168,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
                 {
                     b.HasOne("AplikacjaDoPlanowaniaZadan.Server.DataModels.List", "List")
                         .WithMany("Tasks")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ListId");
 
                     b.Navigation("List");
                 });
