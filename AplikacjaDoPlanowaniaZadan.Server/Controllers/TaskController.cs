@@ -27,11 +27,36 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             _context = context;
         }
 
+        private void updateTasks()
+        {
+            try
+            {
+                var now = DateTime.Now;
+                
+                var overdueTasks = _context.Tasks
+                    .Where(t => t.DueTo.HasValue && t.DueTo < now && t.Status != Status.Finished)
+                    .ToList();               
+                foreach (var task in overdueTasks)
+                {
+                    task.Status = Status.During; 
+                    Console.WriteLine($"[TaskController] Task ID {task.Id} status updated to 'During'.");
+                }
+
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[TaskController] Error in UpdateOverdueTasks: {ex.Message}");
+            }
+        }
+
+
         [HttpGet("todayTasks")]
         public IActionResult GetTodayTasks()
         {
-			// token, trzeba tego użyć wszędzie
-			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+            updateTasks();
+            // token, trzeba tego użyć wszędzie
+            var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
 			var handler = new JwtSecurityTokenHandler();
 			var decodedToken = handler.ReadJwtToken(token);
 			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
