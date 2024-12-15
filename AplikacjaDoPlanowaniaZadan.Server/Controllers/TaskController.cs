@@ -111,7 +111,27 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				_context.Tasks.Add(task);
 				_context.SaveChanges();
 
-			    return Ok(new Task(task));
+				var ret = _context.Tasks
+				.Where(t => t.List.UserId == user.Id)
+				.Include(t => t.List)
+				.Select(t => new
+				{
+					ListId = t.List.Id,
+					ListName = t.List.Name,
+					ListColor = t.List.Color,
+					ListIcon = t.List.Icon,
+					t.Id,
+					t.Name,
+					t.Description,
+					t.DueTo,
+					t.CreationDate,
+					t.Status,
+					t.Priority
+				})
+				.FirstOrDefault(x => x.Id == task.Id);
+
+
+				return Ok(ret);
             }
 			catch (Exception ex)
 			{
