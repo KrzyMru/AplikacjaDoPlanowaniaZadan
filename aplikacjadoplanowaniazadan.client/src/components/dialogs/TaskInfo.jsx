@@ -73,7 +73,7 @@ const TaskInfo = ({ open, onClose, task }) => {
                             borderRadius: 1,
                             ...theme.applyStyles('dark', {
                                 backgroundColor:
-                                    task?.status === 0 ? '#8fabb3' :
+                                    task?.status === 0 ? '#5d8793' :
                                     task?.status === 1 ? '#a57575' :
                                         '#758d75',
                             }),

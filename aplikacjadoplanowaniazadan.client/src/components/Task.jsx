@@ -48,7 +48,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                         borderRadius: 1,
                         ...theme.applyStyles('dark', {
                             backgroundColor:
-                                task?.status === 0 ? '#8fabb3' :
+                                task?.status === 0 ? '#5d8793' :
                                 task?.status === 1 ? '#a57575' :
                                     '#758d75',
                         }),
@@ -76,14 +76,18 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                     />
                 </ListItemIcon>
                 <ListItemButton
-                    sx={{
+                    sx={[(theme) => ({
                         pr: 1, transform: "rotate(90deg)",
                         position: 'absolute',
                         left: '40px', top: '36px',
                         p: 0, width: '96px',
                         backgroundColor: task?.listColor ?? '#dbd7d7',
-                        display: { xs: "none", sm: "-webkit-flex" }
-                    }}
+                        display: { xs: "none", sm: "-webkit-flex" },
+                        ...theme.applyStyles('dark', {
+                            backgroundColor: task?.listColor ? task?.listColor+'d1' : '#dbd7d7',
+                        }),
+                    }),
+                    ]}
                     onClick={() => handleSelect(task?.listId)}
                 >
                     <ListItemIcon sx={{ minWidth: '4px', mr: '4px' }}>
@@ -127,7 +131,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                     />
                 </ListItemButton>
                 <Divider flexItem orientation="vertical" sx={{ mx: 1, display: { xs: "none", sm: "block" } }} />
-                <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1 }}>
+                <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1, width: '80px' }}>
                     <Typography variant="overline" align="center">
                         {task?.status !== 2 ? "Due" : "Completed"}
                     </Typography>

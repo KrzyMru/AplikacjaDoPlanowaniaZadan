@@ -102,7 +102,6 @@ function MainComponent() {
         palette: {
             mode: settings?.find(st => st?.name === "Dark mode")?.value ? 'dark' : 'light',
         },
-        
     });
 
     return (
