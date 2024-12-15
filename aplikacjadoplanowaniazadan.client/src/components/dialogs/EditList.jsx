@@ -39,6 +39,7 @@ const EditList = ({ open, onClose, taskList, editList, icons }) => {
             <DialogContent>
                 <Box sx={{ display: 'flex', flexWrap: 'noWrap', alignItems: 'center' }}>
                     <TextField name="name" label="Name" variant="outlined"
+                        defaultValue={formData?.name}
                         fullWidth sx={{ mb: 2, mt: 2, mr: 1, flexGrow: 1 }}
                         onChange={(event) => {
                             const { name, value } = event.target;
