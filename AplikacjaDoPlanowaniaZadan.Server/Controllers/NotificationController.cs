@@ -41,7 +41,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
             var user = _context.Users
                 .Where(u => u.Email == email)
-                .Include(u => u.Notifications) 
+                .Include(u => u.Notifications)
                 .FirstOrDefault();
 
             if (user == null)

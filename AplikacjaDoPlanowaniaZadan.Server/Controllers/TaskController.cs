@@ -271,7 +271,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			return Ok(tasksInMonth);
 		}
 
-		[HttpPost("toggleTask")]
+        [HttpPost("toggleTask")]
         public IActionResult ToggleTask([FromBody] int taskId)
         {
             var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
@@ -283,17 +283,25 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             try
             {
                 var due2 = task.DueTo;
+                var statusBefore = task.Status;  // Zapisz poprzedni status, aby dostarczyć informacje w powiadomieniu
+                string notificationTitle = "";
+                string notificationContent = "";
+
                 switch (task.Status)
                 {
                     case Status.Finished:
                         task.Status = Status.Planned;
-                        task.DueTo = task.DueTo; 
+                        task.DueTo = task.DueTo;
+                        notificationTitle = "Zadanie zostało ponownie zaplanowane";
+                        notificationContent = $"Zadanie {task.Name} zostało przeniesione z powrotem do stanu 'Planned'.";
                         break;
 
                     case Status.Planned:
                     case Status.During:
                         task.Status = Status.Finished;
-                        task.DueTo = DateTime.Now; 
+                        task.DueTo = DateTime.Now;
+                        notificationTitle = "Zadanie zostało zakończone";
+                        notificationContent = $"Zadanie {task.Name} zostało oznaczone jako 'Finished'.";
                         break;
 
                     default:
@@ -301,6 +309,30 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 }
 
                 _context.SaveChanges();
+
+                var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+                var handler = new JwtSecurityTokenHandler();
+                var decodedToken = handler.ReadJwtToken(token);
+                var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+                var user = _context.Users
+                    .Where(u => u.Email == email)
+                    .FirstOrDefault();
+
+                if (user != null)
+                {
+                    var notification = new Notification
+                    {
+                        Title = notificationTitle,
+                        Content = notificationContent,
+                        SendDate = DateTime.Now,
+                        UserId = user.Id
+                    };
+
+                    _context.Notifications.Add(notification);
+                    _context.SaveChanges();
+                }
+
                 return Ok(task);
             }
             catch (Exception ex)
