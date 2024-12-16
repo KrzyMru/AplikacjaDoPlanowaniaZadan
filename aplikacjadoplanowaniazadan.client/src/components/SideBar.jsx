@@ -97,7 +97,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                             width: 'fit-content',
                             backgroundColor: '#fbf8f0',
                             ...theme.applyStyles('dark', {
-                                backgroundColor: '#43423f',
+                                backgroundColor: '#3d3b41',
                             }),
                         })
                     ]
@@ -129,7 +129,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                                         display: 'block',
                                         backgroundColor: selected === screen?.name ? '#fff0d4' : undefined,
                                         ...theme.applyStyles('dark', {
-                                            backgroundColor: selected === screen?.name ? '#343539' : undefined,
+                                            backgroundColor: selected === screen?.name ? '#2d2c35' : undefined,
                                         }),
                                     }),
                                 ]}
@@ -235,7 +235,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                                 width: '-webkit-fill-available',
                                 backgroundColor: '#e9e6de',
                                 ...theme.applyStyles('dark', {
-                                    backgroundColor: '#414141',
+                                    backgroundColor: '#3d3943',
                                 }),
                             }),
                         ]}

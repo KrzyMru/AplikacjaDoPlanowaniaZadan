@@ -10,12 +10,16 @@ export default function Setting({ setting, icons, handleToggleSetting }) {
 
     return (
         <ListItem
-            sx={{
-                position: 'relative',
-                minHeight: 96, maxHeight: 96,
-                backgroundColor: setting?.value === true ? '#ada7db' : '#e1dfef',
-                p: 0, borderRadius: 1
-            }}
+            sx={[(theme) => ({
+                    position: 'relative',
+                    minHeight: 96, maxHeight: 96,
+                    backgroundColor: setting?.value === true ? '#ada7db' : '#e1dfef',
+                    p: 0, borderRadius: 1,
+                    ...theme.applyStyles('dark', {
+                        backgroundColor: setting?.value === true ? '#554d8d' : '#848293',
+                    }),
+                }),
+            ]}
         >
             <ListItemButton
                 onClick={() => handleToggleSetting(setting?.name)}

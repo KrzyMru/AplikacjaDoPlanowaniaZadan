@@ -176,7 +176,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
                     justifyContent: 'start',
                     backgroundColor: '#f5ffff',
                     ...theme.applyStyles('dark', {
-                        backgroundColor: '#3d3c39',
+                        backgroundColor: '#3f3f3f',
                     }),
                 }),
             ]}

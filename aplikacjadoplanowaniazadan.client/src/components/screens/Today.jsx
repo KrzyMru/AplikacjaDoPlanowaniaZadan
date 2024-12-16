@@ -112,9 +112,9 @@ export default function Today({ hidden, token, handleSelect, icons }) {
             <Typography variant='h5' align='center'
                 sx={[(theme) => ({
                         py: 3, px: 6,
-                        backgroundColor: '#f0fdff',
+                        backgroundColor: '#ecf8f9',
                         ...theme.applyStyles('dark', {
-                            backgroundColor: '#353535',
+                            backgroundColor: '#373737',
                         }),
                     }),
                 ]}
@@ -127,7 +127,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
                         overflowY: 'hidden', flexGrow: 1, position: 'relative',
                         backgroundColor: '#f5ffff',
                         ...theme.applyStyles('dark', {
-                            backgroundColor: '#3d3c39',
+                            backgroundColor: '#3f3f3f',
                         }),
                     }),
                 ]}

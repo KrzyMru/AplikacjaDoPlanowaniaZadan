@@ -201,7 +201,16 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                     {loadingList ? <LinearProgress sx={{ p: '2px', m: '12px' }} /> : taskList?.name}
                 </Typography>
                 <Divider variant="middle" />
-                <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                <Box 
+                    sx={[(theme) => ({
+                            display: 'flex', justifyContent: 'space-around',
+                            backgroundColor: '#effcfd',
+                            ...theme.applyStyles('dark', {
+                                backgroundColor: '#3f3f3fbd',
+                            }),
+                        }),
+                    ]}
+                >
                     {
                         loadingListAction ? <LinearProgress sx={{ width: '100%', m: '18px' }} /> :
                         <React.Fragment>
@@ -218,7 +227,16 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                     }
                 </Box>
                 <Divider variant="middle" />
-                <Box sx={{ overflowY: 'hidden', flexGrow: 1, position: 'relative' }}>
+                <Box
+                    sx={[(theme) => ({
+                        overflowY: 'hidden', flexGrow: 1, position: 'relative',
+                            backgroundColor: '#f5ffff',
+                            ...theme.applyStyles('dark', {
+                                backgroundColor: '#3f3f3f',
+                            }),
+                        }),
+                    ]}
+                >
                     <List
                         sx={{
                             m: 1, overflowY: 'auto', px: 2, position: 'absolute',
