@@ -163,7 +163,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                     ))}
                 </List>
                 <Divider />
-                <Box sx={{ overflowY: 'hidden', flexGrow: 1, position: 'relative' }}>
+                <Box sx={{ flexGrow: 1, position: 'relative' }}>
                     <ListItem key={"Settings"} disablePadding
                         sx={{
                             display: 'block',
@@ -231,7 +231,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                     <List 
                         sx={[(theme) => ({
                                 overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
-                                maxHeight: `100%`, minHeight: `100%`,
+                                maxHeight: `100%`, minHeight: `48px`,
                                 width: '-webkit-fill-available',
                                 backgroundColor: '#e9e6de',
                                 ...theme.applyStyles('dark', {
