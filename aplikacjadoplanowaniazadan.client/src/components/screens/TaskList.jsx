@@ -194,6 +194,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                             py: 3, px: 6, backgroundColor: taskList?.color,
                             ...theme.applyStyles('dark', {
                                 backgroundColor: taskList?.color + 'd1',
+                                color: '#0000008a',
                             }),
                         }),
                     ]}
