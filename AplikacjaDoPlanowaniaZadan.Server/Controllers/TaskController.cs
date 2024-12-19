@@ -293,11 +293,12 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 {
                     case Status.Finished:
                         task.Status = Status.Planned;
+						task.DueTo = null;
                         notificationTitle = "Zadanie zostało ponownie zaplanowane";
                         notificationContent = $"Zadanie {task.Name} zostało przeniesione z powrotem do stanu 'Planned'.";
                         break;
 
-                    //case Status.Planned:
+                    case Status.Planned:
                     case Status.During:
                         task.Status = Status.Finished;
                         notificationTitle = "Zadanie zostało zakończone";
