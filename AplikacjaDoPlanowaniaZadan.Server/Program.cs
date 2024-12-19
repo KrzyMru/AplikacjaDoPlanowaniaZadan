@@ -75,11 +75,12 @@ namespace AplikacjaDoPlanowaniaZadan.Server
                 app.ApplyMigrations();
             }
 
-            //app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
+			app.UseAuthentication();
             app.UseAuthorization();
-            app.UseAuthentication();
-            app.MapControllers();
+
+			app.MapControllers();
 
             app.MapFallbackToFile("/index.html");
 

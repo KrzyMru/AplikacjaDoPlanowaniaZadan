@@ -13,9 +13,11 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using System.Collections.Generic;
 using System.Linq;
 using AplikacjaDoPlanowaniaZadan.Server.Migrations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
+	[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class TaskController : ControllerBase
@@ -275,7 +277,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         public IActionResult ToggleTask([FromBody] int taskId)
         {
             var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
-            if (task == null)
+			if (task == null)
             {
                 return NotFound("Zadanie nie zostało znalezione.");
             }
@@ -291,15 +293,13 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 {
                     case Status.Finished:
                         task.Status = Status.Planned;
-                        task.DueTo = task.DueTo;
                         notificationTitle = "Zadanie zostało ponownie zaplanowane";
                         notificationContent = $"Zadanie {task.Name} zostało przeniesione z powrotem do stanu 'Planned'.";
                         break;
 
-                    case Status.Planned:
+                    //case Status.Planned:
                     case Status.During:
                         task.Status = Status.Finished;
-                        task.DueTo = DateTime.Now;
                         notificationTitle = "Zadanie zostało zakończone";
                         notificationContent = $"Zadanie {task.Name} zostało oznaczone jako 'Finished'.";
                         break;
@@ -332,8 +332,25 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                     _context.Notifications.Add(notification);
                     _context.SaveChanges();
                 }
-
-                return Ok(task);
+				var taskSelect = _context.Tasks
+					.Where(t => t.Id == taskId)
+					.Include(t => t.List)
+					.Select(t => new
+					{
+						ListId = t.List.Id,
+						ListName = t.List.Name,
+						ListColor = t.List.Color,
+						ListIcon = t.List.Icon,
+						t.Id,
+						t.Name,
+						t.Description,
+						t.DueTo,
+						t.CreationDate,
+						t.Status,
+						t.Priority
+					})
+					.First();
+				return Ok(taskSelect);
             }
             catch (Exception ex)
             {

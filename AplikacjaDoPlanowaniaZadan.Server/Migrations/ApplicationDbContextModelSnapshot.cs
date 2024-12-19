@@ -53,7 +53,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Lists");
+                    b.ToTable("Lists", (string)null);
                 });
 
             modelBuilder.Entity("AplikacjaDoPlanowaniaZadan.Server.DataModels.Notification", b =>
@@ -82,7 +82,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("AplikacjaDoPlanowaniaZadan.Server.DataModels.Task", b =>
@@ -120,7 +120,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("AplikacjaDoPlanowaniaZadan.Server.DataModels.User", b =>
@@ -141,7 +141,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("AplikacjaDoPlanowaniaZadan.Server.DataModels.List", b =>

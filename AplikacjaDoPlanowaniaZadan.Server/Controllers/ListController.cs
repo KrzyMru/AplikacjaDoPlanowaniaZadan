@@ -15,7 +15,8 @@ using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
-    [ApiController]
+    [Authorize]
+	[ApiController]
     [Route("api/[controller]")]
     public class ListController : ControllerBase
     {

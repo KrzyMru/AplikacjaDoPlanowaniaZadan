@@ -7,9 +7,11 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class NotificationController : ControllerBase
