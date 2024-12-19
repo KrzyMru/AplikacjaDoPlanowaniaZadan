@@ -164,7 +164,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                     ))}
                 </List>
                 <Divider />
-                <Box sx={{ flexGrow: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                     <ListItem key={"Settings"} disablePadding
                         sx={{
                             display: 'block',
@@ -303,7 +303,6 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                                 </ListItem>
                         ))}
                         </List>
-
                     </ListItem>
                 </Box>
             </Drawer>
