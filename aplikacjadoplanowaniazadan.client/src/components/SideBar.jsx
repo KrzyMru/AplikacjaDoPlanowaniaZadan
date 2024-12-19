@@ -95,6 +95,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                     sx: [(theme) => ({
                             position: "relative",
                             width: 'fit-content',
+                            overflow: 'hidden',
                             backgroundColor: '#fbf8f0',
                             ...theme.applyStyles('dark', {
                                 backgroundColor: '#3d3b41',
@@ -163,7 +164,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                     ))}
                 </List>
                 <Divider />
-                <Box sx={{ flexGrow: 1, position: 'relative' }}>
+                <Box sx={{ flexGrow: 1, position: 'relative', display: 'flex', flexDirection: 'column' }}>
                     <ListItem key={"Settings"} disablePadding
                         sx={{
                             display: 'block',
@@ -228,17 +229,22 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                             }
                         </ListItemButton>
                     </ListItem>
-                    <List 
+                    <ListItem key={"ListHeaders"} disablePadding
                         sx={[(theme) => ({
-                                overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
-                                maxHeight: `100%`, minHeight: `48px`,
-                                width: '-webkit-fill-available',
-                                backgroundColor: '#e9e6de',
+                                display: 'block', minHeight: `96px`,
+                                backgroundColor: '#e9e6de', flexGrow: 1,
                                 ...theme.applyStyles('dark', {
                                     backgroundColor: '#3d3943',
                                 }),
                             }),
                         ]}
+                    >
+                    <List 
+                        sx={{
+                            overflowY: 'auto', overflowX: 'hidden', py: 0, position: 'absolute',
+                            maxHeight: `100%`, minHeight: `48px`,
+                            width: '-webkit-fill-available',
+                        }}
                     >
                         {
                             loading ?
@@ -296,7 +302,9 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                                     </ListItemButton>
                                 </ListItem>
                         ))}
-                    </List>
+                        </List>
+
+                    </ListItem>
                 </Box>
             </Drawer>
 
