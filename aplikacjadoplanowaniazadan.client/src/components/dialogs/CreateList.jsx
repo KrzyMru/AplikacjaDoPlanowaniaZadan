@@ -26,6 +26,7 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
                 type: "success",
             });
             onClose();
+            setFormData({ color: '#FFFACD', icon: "Task" });
         } catch (error) {
             setError("Something went wrong.");
         } finally {

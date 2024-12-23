@@ -18,7 +18,7 @@ import TaskInfo from './dialogs/TaskInfo';
 import FlagIcon from '@mui/icons-material/Flag';
 import ListIcon from '@mui/icons-material/List';
 
-export default function Task({ task, toggleTask, deleteTask, loadingAction, handleSelect, icons }) {
+export default function Task({ task, toggleTask, deleteTask, loadingAction, handleSelect, icons, token }) {
 
     const [openInfo, setOpenInfo] = React.useState(null);
 
@@ -170,6 +170,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                 open={openInfo !== null}
                 onClose={handleCloseInfo}
                 task={openInfo}
+                token={token}
             />
         </React.Fragment>
     );

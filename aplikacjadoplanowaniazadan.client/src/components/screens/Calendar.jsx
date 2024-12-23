@@ -227,6 +227,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
                                         loadingAction={loadingTaskAction}
                                         handleSelect={handleSelect}
                                         icons={icons}
+                                        token={token}
                                     />
                                 </Paper>
                             ))

@@ -263,6 +263,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                                     loadingAction={loadingTaskAction}
                                     handleSelect={handleSelect}
                                     icons={icons}
+                                    token={token}
                                 />
                             </Paper>
                         ))}

@@ -157,6 +157,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
                                 loadingAction={loadingAction}
                                 icons={icons}
                                 handleSelect={handleSelect}
+                                token={token}
                             />
                         </Paper>
                     ))}

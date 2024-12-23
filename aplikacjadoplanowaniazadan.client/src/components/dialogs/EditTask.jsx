@@ -9,34 +9,33 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { toast } from 'react-toastify';
+import dayjs from "dayjs";
 
-const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
+const EditTask = ({ open, onClose, task, token }) => {
 
-    const [formData, setFormData] = React.useState({priority: 1});
+    const [formData, setFormData] = React.useState({ ...task, dueTo: task?.dueTo ? dayjs(task.dueTo) : null });
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
-    const saveTask = async (formData) => {
+    const editTask = async (formData) => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:5141/api/task/saveTask", {
+            const response = await fetch("http://localhost:5141/api/task/editTask", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": 'Bearer ' + token,
                 },
-                body: JSON.stringify({ ...formData, dueTo: formData?.dueTo?.format("YYYY-MM-DD HH:mm:ss") }),
+                body: JSON.stringify({ ...formData, dueTo: formData?.dueTo ? formData?.dueTo?.add(1, 'hour') : null }),
             });
             if (!response.ok)
                 throw Error(response?.status);
             const data = await response.json();
-            setTaskList({ ...taskList, tasks: [data, ...taskList.tasks] });
-            toast("Task created successfully.", {
+            toast("Task updated successfully.", {
                 theme: "light",
                 type: "success",
             });
             onClose();
-            setFormData({ priority: 1 });
         } catch (error) {
             setError("Something went wrong.");
         }
@@ -45,8 +44,8 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
         }
     }
 
-    const handleCreateTask = (formData) => {
-        saveTask({ ...formData, listId: taskList?.id });
+    const handleEditTask = (formData) => {
+        editTask(formData);
     }
 
     return (
@@ -59,7 +58,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
             <DialogTitle>
                 <div>
                     <Typography variant="h4" align="center">
-                        Create task
+                        Edit task
                     </Typography>
                 </div>
             </DialogTitle>
@@ -67,6 +66,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
             <DialogContent>
                 <TextField name="name" label="Name" variant="outlined"
                     fullWidth sx={{ mb: 2, mt: 2 }}
+                    defaultValue={formData?.name}
                     onChange={(event) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
@@ -75,6 +75,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
                 <TextField name="description" label="Description" variant="outlined"
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}
+                    defaultValue={formData?.description}
                     onChange={(event) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
@@ -116,7 +117,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
                     <Button
                         variant="contained"
                         endIcon={<SaveIcon />}
-                        onClick={() => handleCreateTask(formData)}
+                        onClick={() => handleEditTask(formData)}
                         disabled={loading}
                     >
                         Save
@@ -139,4 +140,4 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
     );
 };
 
-export default CreateTask;
+export default EditTask;
