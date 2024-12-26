@@ -273,7 +273,53 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			return Ok(tasksInMonth);
 		}
 
-        [HttpPost("toggleTask")]
+		[HttpPost("editTask")]
+		public IActionResult EditTask([FromBody] Task request)
+		{
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+
+			var task = _context.Tasks.FirstOrDefault(x => x.Id == request.Id);
+			task.Name = request.Name;
+			task.Description = request.Description;
+			task.Status = request.Status;
+			task.DueTo = request.DueTo;
+			task.Priority = request.Priority;
+
+			_context.Tasks.Update(task);
+			_context.SaveChanges();
+
+
+			var tasksWithFlattenedListDetails = _context.Tasks
+			.Where(t => t.List.UserId == user.Id)
+			.Include(t => t.List)
+			.Select(t => new
+			{
+				ListId = t.List.Id,
+				ListName = t.List.Name,
+				ListColor = t.List.Color,
+				ListIcon = t.List.Icon,
+				t.Id,
+				t.Name,
+				t.Description,
+				t.DueTo,
+				t.CreationDate,
+				t.Status,
+				t.Priority
+			})
+			.ToList();
+
+			return Ok(tasksWithFlattenedListDetails);
+		}
+
+		[HttpPost("toggleTask")]
         public IActionResult ToggleTask([FromBody] int taskId)
         {
             var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
