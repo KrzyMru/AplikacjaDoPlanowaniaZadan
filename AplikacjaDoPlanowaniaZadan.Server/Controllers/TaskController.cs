@@ -287,9 +287,13 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				.FirstOrDefault();
 
 			var task = _context.Tasks.FirstOrDefault(x => x.Id == request.Id);
+			
+			if (request.DueTo > DateTime.Now)
+				task.Status = Status.Planned;
+
+
 			task.Name = request.Name;
 			task.Description = request.Description;
-			task.Status = request.Status;
 			task.DueTo = request.DueTo;
 			task.Priority = request.Priority;
 
