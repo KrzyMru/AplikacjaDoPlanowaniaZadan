@@ -96,6 +96,21 @@ export default function Today({ hidden, token, handleSelect, icons }) {
 
         }
     }
+    const editTask = async (formData) => {
+        const response = await fetch("http://localhost:5141/api/task/editTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + token,
+            },
+            body: JSON.stringify({ ...formData, dueTo: formData?.dueTo ? formData?.dueTo?.add(1, 'hour') : null }),
+        });
+        if (!response.ok)
+            throw Error(response?.status);
+        const data = await response.json();
+        console.log(data);
+        setTodayTasks(todayTasks.map(task => task?.id === data?.id ? { ...data } : task));
+    }
 
     const [loadingList, setLoadingList] = React.useState(false);
     const [loadingAction, setLoadingAction] = React.useState([]);
@@ -154,6 +169,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
                                 task={task}
                                 toggleTask={toggleTask}
                                 deleteTask={deleteTask}
+                                editTask={editTask}
                                 loadingAction={loadingAction}
                                 icons={icons}
                                 handleSelect={handleSelect}

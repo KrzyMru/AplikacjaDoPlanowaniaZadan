@@ -134,7 +134,6 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
             setLoadingListAction(false);
         }
     }
-
     const editList = async (formData) => {
         const response = await fetch("http://localhost:5141/api/list/editList", {
             method: "POST",
@@ -154,7 +153,6 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
             type: "success",
         });
     }
-
     const editTask = async (formData) => {
         const response = await fetch("http://localhost:5141/api/task/editTask", {
             method: "POST",
@@ -166,8 +164,8 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
         });
         if (!response.ok)
             throw Error(response?.status);
-        //const data = await response.json();
-        const data = { id: 0, name: 'task01', description: 'taskdesc' };
+        const data = await response.json();
+        console.log(data);
         setTaskList(taskList.map(task => task?.id === data?.id ? { ...data } : task));
     }
 

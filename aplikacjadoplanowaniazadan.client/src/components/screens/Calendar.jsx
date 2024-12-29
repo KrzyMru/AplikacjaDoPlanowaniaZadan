@@ -144,6 +144,21 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
 
         }
     }
+    const editTask = async (formData) => {
+        const response = await fetch("http://localhost:5141/api/task/editTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + token,
+            },
+            body: JSON.stringify({ ...formData, dueTo: formData?.dueTo ? formData?.dueTo?.add(1, 'hour') : null }),
+        });
+        if (!response.ok)
+            throw Error(response?.status);
+        const data = await response.json();
+        console.log(data);
+        setDayTasks(dayTasks.map(task => task?.id === data?.id ? { ...data } : task));
+    }
 
     const [loadingCalendar, setLoadingCalendar] = React.useState(false);
     const [loadingTasks, setLoadingTasks] = React.useState(false);
@@ -224,10 +239,10 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
                                         task={task}
                                         toggleTask={toggleTask}
                                         deleteTask={deleteTask}
+                                        editTask={editTask}
                                         loadingAction={loadingTaskAction}
                                         handleSelect={handleSelect}
                                         icons={icons}
-                                        token={token}
                                     />
                                 </Paper>
                             ))
