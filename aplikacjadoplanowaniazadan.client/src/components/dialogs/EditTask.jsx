@@ -11,26 +11,16 @@ import Select from '@mui/material/Select';
 import { toast } from 'react-toastify';
 import dayjs from "dayjs";
 
-const EditTask = ({ open, onClose, task, token }) => {
+const EditTask = ({ open, onClose, task, editTask }) => {
 
     const [formData, setFormData] = React.useState({ ...task, dueTo: task?.dueTo ? dayjs(task.dueTo) : null });
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
-    const editTask = async (formData) => {
+    const handleEditTask = async (formData) => {
         setLoading(true);
         try {
-            const response = await fetch("http://localhost:5141/api/task/editTask", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": 'Bearer ' + token,
-                },
-                body: JSON.stringify({ ...formData, dueTo: formData?.dueTo ? formData?.dueTo?.add(1, 'hour') : null }),
-            });
-            if (!response.ok)
-                throw Error(response?.status);
-            const data = await response.json();
+            await editTask(formData);
             toast("Task updated successfully.", {
                 theme: "light",
                 type: "success",
@@ -38,14 +28,9 @@ const EditTask = ({ open, onClose, task, token }) => {
             onClose();
         } catch (error) {
             setError("Something went wrong.");
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
-    }
-
-    const handleEditTask = (formData) => {
-        editTask(formData);
     }
 
     return (
@@ -84,7 +69,6 @@ const EditTask = ({ open, onClose, task, token }) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                     <DateTimePicker name="dueTo" label="Due to"
                         sx={{ width: "100%", mb: 2 }}
-                        disablePast
                         defaultValue={formData?.dueTo}
                         onChange={(newValue) => {
                             setFormData({ ...formData, dueTo: newValue });

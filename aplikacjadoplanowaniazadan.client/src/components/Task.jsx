@@ -18,7 +18,7 @@ import TaskInfo from './dialogs/TaskInfo';
 import FlagIcon from '@mui/icons-material/Flag';
 import ListIcon from '@mui/icons-material/List';
 
-export default function Task({ task, toggleTask, deleteTask, loadingAction, handleSelect, icons, token }) {
+export default function Task({ task, toggleTask, deleteTask, editTask, loadingAction, handleSelect, icons }) {
 
     const [openInfo, setOpenInfo] = React.useState(null);
 
@@ -130,7 +130,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                         primaryTypographyProps={{ noWrap: true }}
                     />
                 </ListItemButton>
-                <Divider flexItem orientation="vertical" sx={{ mx: 1, display: { xs: "none", sm: "block" } }} />
+                <Divider flexItem orientation="vertical" sx={{ mr: 1, display: { xs: "none", sm: "block" } }} />
                 <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1, width: '80px' }}>
                     <Typography variant="overline" align="center">
                         {task?.status !== 2 ? "Due" : "Completed"}
@@ -170,7 +170,7 @@ export default function Task({ task, toggleTask, deleteTask, loadingAction, hand
                 open={openInfo !== null}
                 onClose={handleCloseInfo}
                 task={openInfo}
-                token={token}
+                editTask={editTask}
             />
         </React.Fragment>
     );

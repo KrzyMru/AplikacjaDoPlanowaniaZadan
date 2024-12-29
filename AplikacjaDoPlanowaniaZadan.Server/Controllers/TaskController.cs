@@ -342,8 +342,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                 switch (task.Status)
                 {
                     case Status.Finished:
-                        task.Status = Status.Planned;
-						task.DueTo = null;
+						if(task.DueTo < DateTime.Now)
+                            task.Status = Status.During;
+                        else
+							task.Status = Status.Planned;
                         notificationTitle = "Zadanie zostało ponownie zaplanowane";
                         notificationContent = $"Zadanie {task.Name} zostało przeniesione z powrotem do stanu 'Planned'.";
                         break;

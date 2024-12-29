@@ -20,7 +20,7 @@ const GetTimeFromSeconds = (seconds) => {
     return result;
 }
 
-const TaskInfo = ({ open, onClose, task, token }) => {
+const TaskInfo = ({ open, onClose, task, editTask }) => {
 
     const [timeNow, setTimeNow] = React.useState(dayjs());
     const [openEditTask, setOpenEditTask] = React.useState(null);
@@ -41,6 +41,7 @@ const TaskInfo = ({ open, onClose, task, token }) => {
     }
     const handleCloseEditTask = () => {
         setOpenEditTask(null);
+        onClose();
     }
 
     return (
@@ -161,7 +162,7 @@ const TaskInfo = ({ open, onClose, task, token }) => {
                 open={openEditTask != null}
                 onClose={handleCloseEditTask}
                 task={openEditTask}
-                token={token}
+                editTask={editTask}
                 key={openEditTask}
             />
         </React.Fragment>

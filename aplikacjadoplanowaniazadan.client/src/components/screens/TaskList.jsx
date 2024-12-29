@@ -155,6 +155,22 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
         });
     }
 
+    const editTask = async (formData) => {
+        const response = await fetch("http://localhost:5141/api/task/editTask", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + token,
+            },
+            body: JSON.stringify({ ...formData, dueTo: formData?.dueTo ? formData?.dueTo?.add(1, 'hour') : null }),
+        });
+        if (!response.ok)
+            throw Error(response?.status);
+        //const data = await response.json();
+        const data = { id: 0, name: 'task01', description: 'taskdesc' };
+        setTaskList(taskList.map(task => task?.id === data?.id ? { ...data } : task));
+    }
+
     const [loadingList, setLoadingList] = React.useState(false);
     const [loadingTaskAction, setLoadingTaskAction] = React.useState([]);
     const [loadingListAction, setLoadingListAction] = React.useState(false);
@@ -260,10 +276,10 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                                     task={task}
                                     toggleTask={toggleTask}
                                     deleteTask={deleteTask}
+                                    editTask={editTask}
                                     loadingAction={loadingTaskAction}
                                     handleSelect={handleSelect}
                                     icons={icons}
-                                    token={token}
                                 />
                             </Paper>
                         ))}
