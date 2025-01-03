@@ -231,7 +231,7 @@ export default function SideBar({ token, selected, handleSelect, taskListHeaders
                     </ListItem>
                     <ListItem key={"ListHeaders"} disablePadding
                         sx={[(theme) => ({
-                                display: 'block', minHeight: `96px`,
+                                display: 'block', minHeight: `144px`,
                                 backgroundColor: '#e9e6de', flexGrow: 1,
                                 ...theme.applyStyles('dark', {
                                     backgroundColor: '#3d3943',

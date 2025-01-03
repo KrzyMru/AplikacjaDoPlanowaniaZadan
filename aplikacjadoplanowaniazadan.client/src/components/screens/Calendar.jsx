@@ -156,7 +156,6 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
         if (!response.ok)
             throw Error(response?.status);
         const data = await response.json();
-        console.log(data);
         setDayTasks(dayTasks.map(task => task?.id === data?.id ? { ...data } : task));
     }
 

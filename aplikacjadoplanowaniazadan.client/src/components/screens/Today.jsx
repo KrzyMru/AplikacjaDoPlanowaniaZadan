@@ -108,7 +108,6 @@ export default function Today({ hidden, token, handleSelect, icons }) {
         if (!response.ok)
             throw Error(response?.status);
         const data = await response.json();
-        console.log(data);
         setTodayTasks(todayTasks.map(task => task?.id === data?.id ? { ...data } : task));
     }
 
