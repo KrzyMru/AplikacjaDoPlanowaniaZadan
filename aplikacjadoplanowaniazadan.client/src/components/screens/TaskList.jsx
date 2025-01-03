@@ -165,8 +165,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
         if (!response.ok)
             throw Error(response?.status);
         const data = await response.json();
-        console.log(data);
-        setTaskList(taskList.map(task => task?.id === data?.id ? { ...data } : task));
+        setTaskList({ ...taskList, tasks: taskList?.tasks.map(task => task?.id === data?.id ? { ...task, ...data } : task) });
     }
 
     const [loadingList, setLoadingList] = React.useState(false);
