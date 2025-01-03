@@ -301,7 +301,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 			_context.SaveChanges();
 
 
-			var tasksWithFlattenedListDetails = _context.Tasks
+			var taskWithFlattenedListDetails = _context.Tasks
 			.Where(t => t.List.UserId == user.Id)
 			.Include(t => t.List)
 			.Select(t => new
@@ -318,9 +318,9 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				t.Status,
 				t.Priority
 			})
-			.ToList();
+			.FirstOrDefault(x => x.Id == request.Id);
 
-			return Ok(tasksWithFlattenedListDetails);
+			return Ok(taskWithFlattenedListDetails);
 		}
 
 		[HttpPost("toggleTask")]
