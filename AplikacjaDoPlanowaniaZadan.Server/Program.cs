@@ -2,6 +2,7 @@
 using AplikacjaDoPlanowaniaZadan.Server.DAL.EF;
 using AplikacjaDoPlanowaniaZadan.Server.DataModels;
 using AplikacjaDoPlanowaniaZadan.Server.Extensions;
+using AplikacjaDoPlanowaniaZadan.Server.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddHostedService<TaskStatusUpdaterService>();
 
             builder.Services.AddCors(options =>
             {
