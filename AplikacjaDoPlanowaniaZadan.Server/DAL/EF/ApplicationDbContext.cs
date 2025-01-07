@@ -30,6 +30,12 @@ namespace AplikacjaDoPlanowaniaZadan.Server.DAL.EF
 				.HasOne(t => t.List)
 				.WithMany(l => l.Tasks)
 				.OnDelete(DeleteBehavior.Cascade);
-		}
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany(u => u.Notifications)
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // To zapobiega problemowi cykli
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Services
     public class TaskStatusUpdaterService : BackgroundService
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly TimeSpan _interval = TimeSpan.FromSeconds(30); 
+        private readonly TimeSpan _interval = TimeSpan.FromSeconds(30);
 
         public TaskStatusUpdaterService(IServiceScopeFactory scopeFactory)
         {
@@ -38,16 +38,33 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Services
                 var now = DateTime.Now;
 
                 var overdueTasks = await dbContext.Tasks
-                    .Where(t => t.DueTo.HasValue && t.DueTo < now && t.Status != Status.Finished)
+                    .Include(t => t.List) 
+                    .ThenInclude(l => l.User) 
+                    .Where(t => t.DueTo.HasValue && t.DueTo < now && t.Status != Status.Finished && t.Status != Status.During)
                     .ToListAsync(cancellationToken);
 
                 foreach (var task in overdueTasks)
                 {
+                    var previousStatus = task.Status;
                     task.Status = Status.During;
-                    Console.WriteLine($"[TaskStatusUpdaterService] Task ID {task.Id} status updated to 'During'.");
+
+                    var user = task.List.User; 
+                    if (user != null)
+                    {
+                        var notification = new Notification
+                        {
+                            Title = "Zadanie stało się zaległe",
+                            Content = $"Zadanie '{task.Name}' na liście '{task.List.Name}' zmieniło status z '{previousStatus}' na 'During'.",
+                            SendDate = DateTime.Now,
+                            UserId = user.Id
+                        };
+
+                        dbContext.Notifications.Add(notification);
+                        Console.WriteLine($"[TaskStatusUpdaterService] Task ID {task.Id} status updated to 'During'. Notification created for user {user.Email}.");
+                    }
                 }
 
-                await dbContext.SaveChangesAsync(cancellationToken); 
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
             {
