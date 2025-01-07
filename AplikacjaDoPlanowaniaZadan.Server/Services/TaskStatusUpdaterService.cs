@@ -43,7 +43,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Services
 
                 foreach (var task in overdueTasks)
                 {
-                    task.Status = Status.Finished;
+                    task.Status = Status.During;
                     Console.WriteLine($"[TaskStatusUpdaterService] Task ID {task.Id} status updated to 'During'.");
                 }
 
