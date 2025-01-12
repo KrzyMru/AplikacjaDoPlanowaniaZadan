@@ -53,9 +53,16 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
             var notifications = user.Notifications
                 .OrderByDescending(n => n.SendDate)
-                .ToList();
+				 .Select(l => new
+				 {
+					 l.Id,
+					 l.Title,
+					 l.Content,
+					 l.SendDate
+				 })
+				.ToList();
 
-            return Ok(notifications);
+			return Ok(notifications);
         }
     }
 }
