@@ -214,7 +214,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                 >
                     {loadingList ? <LinearProgress sx={{ p: '2px', m: '12px' }} /> : taskList?.name}
                 </Typography>
-                <Divider variant="middle" />
+                <Divider variant="fullWidth" />
                 <Box 
                     sx={[(theme) => ({
                             display: 'flex', justifyContent: 'space-around',
@@ -240,7 +240,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                         </React.Fragment>
                     }
                 </Box>
-                <Divider variant="middle" />
+                <Divider variant="fullWidth" />
                 <Box
                     sx={[(theme) => ({
                         overflowY: 'hidden', flexGrow: 1, position: 'relative',

@@ -135,7 +135,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
             >
                 {"Today"}
             </Typography>
-            <Divider variant="middle" />
+            <Divider variant="fullWidth" />
             <Box
                 sx={[(theme) => ({
                         overflowY: 'hidden', flexGrow: 1, position: 'relative',
