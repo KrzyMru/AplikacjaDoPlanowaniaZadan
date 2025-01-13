@@ -197,7 +197,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             _context.Update(existingList);
             _context.SaveChanges();
 
-            var ret = _context.Lists.Where(x=>x.Id == existingList.Id).Select(l => new
+            var ret = _context.Lists.Where(x=>x.Id == existingList.Id)
+			.Select(l => new
 			{
 				l.Id,
 				l.Name,
@@ -206,13 +207,17 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 				l.Icon,
 				Tasks = l.Tasks.Select(t => new
 				{
+					ListId = t.List.Id,
+					ListName = t.List.Name,
+					ListColor = t.List.Color,
+					ListIcon = t.List.Icon,
 					t.Id,
 					t.Name,
 					t.Description,
 					t.DueTo,
-					t.Priority,
+					t.CreationDate,
 					t.Status,
-					t.CreationDate
+					t.Priority
 				}).ToList()
 			}).FirstOrDefault();
 

@@ -288,10 +288,13 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
 			var task = _context.Tasks.FirstOrDefault(x => x.Id == request.Id);
 			
-			if (request.DueTo > DateTime.Now || request.DueTo == null)
-				task.Status = Status.Planned;
-			if (request.DueTo < DateTime.Now)
-				task.Status = Status.During;
+			if(task.Status != Status.Finished)
+			{
+				if (request.DueTo > DateTime.Now || request.DueTo == null)
+					task.Status = Status.Planned;
+				if (request.DueTo < DateTime.Now)
+					task.Status = Status.During;
+			}
 
 
 			task.Name = request.Name;
