@@ -12,7 +12,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import EditList from '../dialogs/EditList';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { toast } from 'react-toastify';
+import ListInfo from '../dialogs/ListInfo';
 
 export default function TaskList({ hidden, token, listId, taskListHeaders, setTaskListHeaders, handleSelect, icons }) {
 
@@ -147,7 +149,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
             throw Error(response?.status);
         const data = await response.json();
         setTaskList(data);
-        setTaskListHeaders(taskListHeaders.map(tlh => tlh?.id === data?.id ? { ...tlh, name: data?.name, color: data?.color } : tlh));
+        setTaskListHeaders(taskListHeaders.map(tlh => tlh?.id === data?.id ? { ...tlh, name: data?.name, color: data?.color, icon: data?.icon } : tlh));
         toast("List details changed successfully.", {
             theme: "light",
             type: "success",
@@ -172,8 +174,16 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
     const [loadingTaskAction, setLoadingTaskAction] = React.useState([]);
     const [loadingListAction, setLoadingListAction] = React.useState(false);
     const [taskList, setTaskList] = React.useState(null);
+    const [openInfo, setOpenInfo] = React.useState(null);
     const [openCreateTask, setOpenCreateTask] = React.useState(false);
     const [openEditList, setOpenEditList] = React.useState(false);
+
+    const handleOpenInfo = (list) => {
+        setOpenInfo({name: list?.name, description: list?.description, color: list?.color});
+    }
+    const handleCloseInfo = () => {
+        setOpenInfo(null);
+    }
 
     const handleOpenCreateTask = () => {
         setOpenCreateTask(true);
@@ -197,7 +207,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
         <React.Fragment>
             <Box
                 sx={{
-                    display: hidden ? 'none' : 'flex',
+                    display: hidden ? 'none' : 'flex', position: 'relative',
                     justifyContent: 'center', flexDirection: 'column',
                     flexWrap: 'no-wrap', height: '100%', overflowY: 'hidden'
                 }}
@@ -214,13 +224,19 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                 >
                     {loadingList ? <LinearProgress sx={{ p: '2px', m: '12px' }} /> : taskList?.name}
                 </Typography>
+                <IconButton
+                    onClick={() => handleOpenInfo(taskList)}
+                    sx={{ position: 'absolute', top: '5px', right: '5px' }}
+                >
+                    <InfoOutlinedIcon />
+                </IconButton>
                 <Divider variant="fullWidth" />
                 <Box 
                     sx={[(theme) => ({
                             display: 'flex', justifyContent: 'space-around',
-                            backgroundColor: '#effcfd',
+                            backgroundColor: '#ebf9f9',
                             ...theme.applyStyles('dark', {
-                                backgroundColor: '#3f3f3fbd',
+                                backgroundColor: '#383a3b',
                             }),
                         }),
                     ]}
@@ -283,6 +299,12 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                     </List>
                 </Box>
             </Box>
+
+            <ListInfo
+                open={openInfo !== null}
+                onClose={handleCloseInfo}
+                list={openInfo}
+            />
 
             <CreateTask
                 open={openCreateTask}

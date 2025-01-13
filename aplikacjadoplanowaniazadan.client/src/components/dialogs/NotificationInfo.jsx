@@ -45,7 +45,7 @@ const NotificationInfo = ({ open, onClose, notification }) => {
                     </Box>
                 </Box>
                 <Divider sx={{ mb: '20px' }} />
-                <Typography variant="body1" align="left">
+                <Typography variant="body1" align="left" sx={{ minHeight: '300px' }}>
                     {notification?.content}
                 </Typography>
             </DialogContent>

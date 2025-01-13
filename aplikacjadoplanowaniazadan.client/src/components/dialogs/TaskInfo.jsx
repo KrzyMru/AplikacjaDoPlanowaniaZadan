@@ -145,10 +145,11 @@ const TaskInfo = ({ open, onClose, task, editTask }) => {
                         </Box>
                     </Box>
                     <Divider sx={{ mb: '20px' }} />
-                    <Typography variant="body1" align="left">
+                    <Typography variant="body1" align="left" sx={{ minHeight: '300px' }}>
                         {task?.description}
                     </Typography>
                 </DialogContent>
+                <Divider />
                 <DialogActions>
                     <Button variant="outlined" startIcon={<EditIcon />}
                         onClick={() => handleOpenEditTask(task)}
