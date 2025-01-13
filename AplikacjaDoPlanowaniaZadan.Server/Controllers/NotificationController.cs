@@ -64,5 +64,35 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 
 			return Ok(notifications);
         }
-    }
+
+		[HttpDelete("deleteNotification")]
+		public IActionResult DeleteNotifcation([FromBody] int notificationId)
+		{
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			var handler = new JwtSecurityTokenHandler();
+			var decodedToken = handler.ReadJwtToken(token);
+			var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
+
+			var user = _context.Users
+				.Where(user => user.Email == email)
+				.Include(user => user.Lists)
+				.FirstOrDefault();
+			if (user == null)
+			{
+				return BadRequest();
+			}
+
+			var notification = _context.Notifications.Where(x => x.UserId == user.Id).FirstOrDefault(t => t.Id == notificationId);
+
+			if (notification == null)
+			{
+				return NotFound(new { success = false, message = "Notification not found." });
+			}
+
+			_context.Notifications.Remove(notification);
+			_context.SaveChanges();
+
+			return Ok(new { success = true, message = "Notification deleted successfully." });
+		}
+	}
 }
