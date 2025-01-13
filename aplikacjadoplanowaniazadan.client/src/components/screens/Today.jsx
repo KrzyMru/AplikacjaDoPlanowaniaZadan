@@ -66,6 +66,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
     }
     const toggleTask = async (taskId) => {
         try {
+            setLoadingToggle([...loadingToggle, taskId]);
             const response = await fetch("http://localhost:5141/api/task/toggleTask", {
                 method: "POST",
                 headers: {
@@ -93,7 +94,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
             });
         }
         finally {
-
+            setLoadingToggle((prevState) => (prevState.filter(id => id !== taskId)));
         }
     }
     const editTask = async (formData) => {
@@ -112,6 +113,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
     }
 
     const [loadingList, setLoadingList] = React.useState(false);
+    const [loadingToggle, setLoadingToggle] = React.useState([]);
     const [loadingAction, setLoadingAction] = React.useState([]);
     const [todayTasks, setTodayTasks] = React.useState([]);
 
@@ -170,6 +172,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
                                 deleteTask={deleteTask}
                                 editTask={editTask}
                                 loadingAction={loadingAction}
+                                loadingToggle={loadingToggle}
                                 icons={icons}
                                 handleSelect={handleSelect}
                                 token={token}

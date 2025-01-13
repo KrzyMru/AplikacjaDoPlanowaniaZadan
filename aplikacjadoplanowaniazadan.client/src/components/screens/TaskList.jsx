@@ -75,6 +75,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
     }
     const toggleTask = async (taskId) => {
         try {
+            setLoadingTaskToggle([...loadingTaskToggle, taskId]);
             const response = await fetch("http://localhost:5141/api/task/toggleTask", {
                 method: "POST",
                 headers: {
@@ -104,7 +105,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
             });
         }
         finally {
-
+            setLoadingTaskToggle((prevState) => (prevState.filter(id => id !== taskId)));
         }
     }
     const deleteList = async (listId) => {
@@ -171,6 +172,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
     }
 
     const [loadingList, setLoadingList] = React.useState(false);
+    const [loadingTaskToggle, setLoadingTaskToggle] = React.useState([]);
     const [loadingTaskAction, setLoadingTaskAction] = React.useState([]);
     const [loadingListAction, setLoadingListAction] = React.useState(false);
     const [taskList, setTaskList] = React.useState(null);
@@ -291,6 +293,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
                                     deleteTask={deleteTask}
                                     editTask={editTask}
                                     loadingAction={loadingTaskAction}
+                                    loadingToggle={loadingTaskToggle}
                                     handleSelect={handleSelect}
                                     icons={icons}
                                 />

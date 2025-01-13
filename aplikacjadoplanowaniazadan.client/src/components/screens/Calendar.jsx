@@ -114,6 +114,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
     }
     const toggleTask = async (taskId) => {
         try {
+            setLoadingTaskToggle([...loadingTaskToggle, taskId]);
             const response = await fetch("http://localhost:5141/api/task/toggleTask", {
                 method: "POST",
                 headers: {
@@ -141,7 +142,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
             });
         }
         finally {
-
+            setLoadingTaskToggle((prevState) => (prevState.filter(id => id !== taskId)));
         }
     }
     const editTask = async (formData) => {
@@ -161,6 +162,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
 
     const [loadingCalendar, setLoadingCalendar] = React.useState(false);
     const [loadingTasks, setLoadingTasks] = React.useState(false);
+    const [loadingTaskToggle, setLoadingTaskToggle] = React.useState([]);
     const [loadingTaskAction, setLoadingTaskAction] = React.useState([]);
     const [selectedDate, setSelectedDate] = React.useState(dayjs());
     const [monthTaskCounts, setMonthTaskCounts] = React.useState({});
@@ -243,6 +245,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
                                         deleteTask={deleteTask}
                                         editTask={editTask}
                                         loadingAction={loadingTaskAction}
+                                        loadingToggle={loadingTaskToggle}
                                         handleSelect={handleSelect}
                                         icons={icons}
                                     />
