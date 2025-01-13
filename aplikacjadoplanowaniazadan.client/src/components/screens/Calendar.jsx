@@ -109,7 +109,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
             });
         }
         finally {
-            setLoadingTaskAction(loadingTaskAction.filter(id => id !== taskId));
+            setLoadingTaskAction((prevState) => (prevState.filter(id => id !== taskId)));
         }
     }
     const toggleTask = async (taskId) => {

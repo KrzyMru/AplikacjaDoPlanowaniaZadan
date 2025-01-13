@@ -61,7 +61,7 @@ export default function Today({ hidden, token, handleSelect, icons }) {
             });
         }
         finally {
-            setLoadingAction(loadingAction.filter(tid => tid !== taskId));
+            setLoadingAction((prevState) => (prevState.filter(tid => tid !== taskId)));
         }
     }
     const toggleTask = async (taskId) => {
