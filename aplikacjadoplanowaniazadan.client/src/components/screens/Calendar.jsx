@@ -172,8 +172,10 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
     }, [hidden, selectedDate]);
 
     React.useEffect(() => {
-        if (!hidden)
+        if (!hidden) {
+            setSelectedDate(dayjs());
             getMonthTaskCounts(dayjs());
+        }
     }, [hidden]);
 
     const handleMonthChange = (date) => {
@@ -202,6 +204,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
                     value={selectedDate}
                     onChange={(newValue) => setSelectedDate(newValue)}
                     onMonthChange={handleMonthChange}
+                    onYearChange={handleMonthChange}
                     loading={loadingCalendar}
                     renderLoading={() => <DayCalendarSkeleton />}
                     slots={{

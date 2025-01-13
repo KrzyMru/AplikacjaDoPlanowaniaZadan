@@ -20,13 +20,18 @@ const NotificationInfo = ({ open, onClose, notification }) => {
             <Divider />
             <DialogContent>
                 <Box
-                    sx={{
+                    sx={[(theme) => ({
                         display: 'flex',
                         justifyContent: 'space-around',
                         mb: '20px',
                         backgroundColor: '#dceef3',
-                        borderRadius: 1
-                    }}>
+                        borderRadius: 1,
+                        ...theme.applyStyles('dark', {
+                            backgroundColor: '#5d8793'
+                        }),
+                    }),
+                    ]}
+                >
                     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                         <Typography variant="overline" align="center">
                             {"Sent on"}

@@ -22,11 +22,16 @@ export default function Notification({ notification }) {
         <React.Fragment>
             <ListItemButton
                 onClick={() => handleOpenInfo(notification)}
-                sx={{
+                sx={[(theme) => ({
                     position: 'relative',
                     minHeight: 96, maxHeight: 96,
-                    backgroundColor: '#dceef3'
-                }}
+                    backgroundColor: '#dceef3',
+                    borderRadius: 1,
+                    ...theme.applyStyles('dark', {
+                        backgroundColor: '#5d8793'
+                    }),
+                }),
+                ]}
             >
                 <ListItemText
                     sx={{
