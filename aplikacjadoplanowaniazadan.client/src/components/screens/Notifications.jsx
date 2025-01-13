@@ -61,7 +61,7 @@ export default function Notifications({ hidden, token }) {
             });
         }
         finally {
-            setLoadingAction(loadingAction.filter(id => id !== notificationId));
+            setLoadingAction((prevState) => (prevState.filter(id => id !== notificationId)));
         }
     }
 

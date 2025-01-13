@@ -68,7 +68,7 @@ export default function TaskList({ hidden, token, listId, taskListHeaders, setTa
             });
         }
         finally {
-            setLoadingTaskAction(loadingTaskAction.filter(id => id !== taskId));
+            setLoadingTaskAction((prevState) => (prevState.filter(id => id !== taskId)));
         }
     }
     const toggleTask = async (taskId) => {
