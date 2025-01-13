@@ -101,6 +101,7 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
                 theme: "light",
                 type: "success",
             });
+            getMonthTaskCounts(selectedDate);
         }
         catch (error) {
             toast("Something went wrong.", {
@@ -157,7 +158,12 @@ export default function Calendar({ hidden, token, handleSelect, icons }) {
         if (!response.ok)
             throw Error(response?.status);
         const data = await response.json();
-        setDayTasks(dayTasks.map(task => task?.id === data?.id ? { ...data } : task));
+        if (data?.dueTo?.substring(0,10) !== selectedDate?.format('YYYY-MM-DD')) {
+            getMonthTaskCounts(selectedDate);
+            setDayTasks(dayTasks.filter(task => task?.id !== data?.id));
+        }
+        else
+            setDayTasks(dayTasks.map(task => task?.id === data?.id ? { ...data } : task));
     }
 
     const [loadingCalendar, setLoadingCalendar] = React.useState(false);
