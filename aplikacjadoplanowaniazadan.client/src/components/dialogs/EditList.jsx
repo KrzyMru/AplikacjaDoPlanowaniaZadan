@@ -10,6 +10,7 @@ const EditList = ({ open, onClose, taskList, editList, icons }) => {
     const [error, setError] = React.useState(null);
 
     const handleEditList = async (formData) => {
+        setError(null);
         setLoading(true);
         try {
             await editList(formData);

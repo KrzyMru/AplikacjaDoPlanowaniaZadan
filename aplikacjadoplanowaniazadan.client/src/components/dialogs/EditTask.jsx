@@ -18,6 +18,7 @@ const EditTask = ({ open, onClose, task, editTask }) => {
     const [error, setError] = React.useState(null);
 
     const handleEditTask = async (formData) => {
+        setError(null);
         setLoading(true);
         try {
             await editTask(formData);

@@ -22,6 +22,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
     }
 
     const saveTask = async (formData) => {
+        setError(null);
         setLoading(true);
         try {
             const response = await fetch("http://localhost:5141/api/task/saveTask", {
