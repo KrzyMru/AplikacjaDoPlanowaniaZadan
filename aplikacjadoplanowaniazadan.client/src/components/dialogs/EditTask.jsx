@@ -50,14 +50,17 @@ const EditTask = ({ open, onClose, task, editTask }) => {
             <Divider />
             <DialogContent>
                 <TextField name="name" label="Name" variant="outlined"
+                    required
                     fullWidth sx={{ mb: 2, mt: 2 }}
                     defaultValue={formData?.name}
                     onChange={(event) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
+                    error={!(formData?.name && formData?.name?.length > 0)}
                 />
                 <TextField name="description" label="Description" variant="outlined"
+                    required
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}
                     defaultValue={formData?.description}
@@ -65,6 +68,7 @@ const EditTask = ({ open, onClose, task, editTask }) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
+                    error={!(formData?.description && formData?.description?.length > 0)}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                     <DateTimePicker name="dueTo" label="Due to"
@@ -100,9 +104,12 @@ const EditTask = ({ open, onClose, task, editTask }) => {
                 <Box sx={{ position: 'relative' }}>
                     <Button
                         variant="contained"
-                        endIcon={<SaveIcon />}
+                        startIcon={<SaveIcon />}
                         onClick={() => handleEditTask(formData)}
-                        disabled={loading}
+                        disabled={loading ||
+                            !(formData?.name && formData?.name?.length > 0) ||
+                            !(formData?.description && formData?.description?.length > 0)
+                        }
                     >
                         Save
                     </Button>

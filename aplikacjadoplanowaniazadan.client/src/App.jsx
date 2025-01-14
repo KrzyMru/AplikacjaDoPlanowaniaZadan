@@ -102,6 +102,15 @@ function MainComponent() {
         palette: {
             mode: settings?.find(st => st?.name === "Dark mode")?.value ? 'dark' : 'light',
         },
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 700,
+                md: 900,
+                lg: 1200,
+                xl: 1536,
+            },
+        },
     });
 
     return (

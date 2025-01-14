@@ -52,7 +52,7 @@ export default function Notification({ notification, loadingAction, deleteNotifi
                         primaryTypographyProps={{ noWrap: true }}
                     />
                 </ListItemButton>
-                <Divider flexItem orientation="vertical" sx={{ mr: 1, display: { xs: "none", sm: "block" } }} />
+                <Divider flexItem orientation="vertical" sx={{ mr: { xs: 0, sm: 1 }, display: "block"}} />
                 <Box sx={{ display: notification?.sendDate ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1 }}>
                     <Typography variant="overline" align="center">
                         {"Sent on"}

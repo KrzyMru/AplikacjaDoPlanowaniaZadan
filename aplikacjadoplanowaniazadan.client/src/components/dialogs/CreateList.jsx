@@ -6,6 +6,11 @@ import { toast } from 'react-toastify';
 
 const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders, icons }) => {
 
+    const handleClose = () => {
+        onClose();
+        setFormData({ color: '#FFFACD', icon: "Task" });
+    }
+
     const saveList = async (formData) => {
         setLoading(true);
         try {
@@ -25,8 +30,7 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
                 theme: "light",
                 type: "success",
             });
-            onClose();
-            setFormData({ color: '#FFFACD', icon: "Task" });
+            handleClose();
         } catch (error) {
             setError("Something went wrong.");
         } finally {
@@ -44,7 +48,7 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
 
     return (
         <Dialog
-            onClose={onClose}
+            onClose={handleClose}
             open={open}
             fullWidth
             maxWidth={'sm'}
@@ -60,11 +64,13 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
             <DialogContent>
                 <Box sx={{ display: 'flex', flexWrap: 'noWrap', alignItems: 'center' }}>
                     <TextField name="name" label="Name" variant="outlined"
+                        required
                         fullWidth sx={{ mb: 2, mt: 2, mr: 1, flexGrow: 1 }}
                         onChange={(event) => {
                             const { name, value } = event.target;
                             setFormData((prev) => ({ ...prev, [name]: value }))
                         }}
+                        error={!(formData?.name && formData?.name?.length > 0)}
                     />
                     <FormControl sx={{ width: '80px', height: '56px', mr: '12px' }}>
                         <InputLabel>Icon</InputLabel>
@@ -94,12 +100,14 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
                     </FormControl>
                 </Box>
                 <TextField name="description" label="Description" variant="outlined"
+                    required
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}
                     onChange={(event) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
+                    error={!(formData?.description && formData?.description?.length > 0)}
                 />
                 <MuiColorInput name="color" format="hex" value={formData?.color} label="Color"
                     onChange={(value) => {
@@ -117,9 +125,12 @@ const CreateList = ({ open, onClose, token, taskListHeaders, setTaskListHeaders,
                 <Box sx={{ position: 'relative' }}>
                     <Button
                         variant="contained"
-                        endIcon={<SaveIcon />}
+                        startIcon={<SaveIcon />}
                         onClick={() => handleCreateList(formData)}
-                        disabled={loading}
+                        disabled={loading ||
+                            !(formData?.name && formData?.name?.length > 0) ||
+                            !(formData?.description && formData?.description?.length > 0)
+                        }
                     >
                         Save
                     </Button>

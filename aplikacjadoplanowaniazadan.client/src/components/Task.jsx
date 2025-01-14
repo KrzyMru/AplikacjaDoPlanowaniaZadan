@@ -92,7 +92,7 @@ export default function Task({ task, toggleTask, deleteTask, editTask, loadingAc
                             }}
                         />
                     </Tooltip>
-                    <ListItemIcon sx={{ justifyContent: 'center', mr: { xs: 0, sm: "28px" } }}>
+                    <ListItemIcon sx={{ justifyContent: 'center', mr: "28px" }}>
                         <Checkbox
                             edge="start"
                             checked={task?.status == 2}
@@ -108,7 +108,7 @@ export default function Task({ task, toggleTask, deleteTask, editTask, loadingAc
                             left: '40px', top: '36px',
                             p: 0, width: '96px',
                             backgroundColor: task?.listColor ?? '#dbd7d7',
-                            display: { xs: "none", sm: "-webkit-flex" },
+                            display: "-webkit-flex",
                             ...theme.applyStyles('dark', {
                                 backgroundColor: task?.listColor ? task?.listColor + 'd1' : '#dbd7d7',
                             }),
@@ -156,7 +156,7 @@ export default function Task({ task, toggleTask, deleteTask, editTask, loadingAc
                             primaryTypographyProps={{ noWrap: true }}
                         />
                     </ListItemButton>
-                    <Divider flexItem orientation="vertical" sx={{ mr: 1, display: { xs: "none", sm: "block" } }} />
+                    <Divider flexItem orientation="vertical" sx={{ mr: {xs: 0, sm: 1}, display: "block" }} />
                     <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1, width: '80px' }}>
                         <Typography variant="overline" align="center">
                             {task?.status !== 2 ? "Due" : "Completed"}

@@ -151,7 +151,7 @@ const TaskInfo = ({ open, onClose, task, editTask }) => {
                 </DialogContent>
                 <Divider />
                 <DialogActions>
-                    <Button variant="outlined" startIcon={<EditIcon />}
+                    <Button variant="contained" startIcon={<EditIcon />}
                         onClick={() => handleOpenEditTask(task)}
                     >
                         Edit

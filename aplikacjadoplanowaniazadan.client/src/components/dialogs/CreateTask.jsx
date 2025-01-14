@@ -16,6 +16,11 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState(null);
 
+    const handleClose = () => {
+        onClose();
+        setFormData({ priority: 1 });
+    }
+
     const saveTask = async (formData) => {
         setLoading(true);
         try {
@@ -35,8 +40,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
                 theme: "light",
                 type: "success",
             });
-            onClose();
-            setFormData({ priority: 1 });
+            handleClose();
         } catch (error) {
             setError("Something went wrong.");
         }
@@ -51,7 +55,7 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
 
     return (
         <Dialog
-            onClose={onClose}
+            onClose={handleClose}
             open={open}
             fullWidth
             maxWidth={'sm'}
@@ -66,19 +70,23 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
             <Divider />
             <DialogContent>
                 <TextField name="name" label="Name" variant="outlined"
+                    required
                     fullWidth sx={{ mb: 2, mt: 2 }}
                     onChange={(event) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
+                    error={!(formData?.name && formData?.name?.length > 0)}
                 />
                 <TextField name="description" label="Description" variant="outlined"
+                    required
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}
                     onChange={(event) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
+                    error={!(formData?.description && formData?.description?.length > 0)}
                 />
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                     <DateTimePicker name="dueTo" label="Due to"
@@ -115,9 +123,12 @@ const CreateTask = ({ open, onClose, token, taskList, setTaskList }) => {
                 <Box sx={{ position: 'relative' }}>
                     <Button
                         variant="contained"
-                        endIcon={<SaveIcon />}
+                        startIcon={<SaveIcon />}
                         onClick={() => handleCreateTask(formData)}
-                        disabled={loading}
+                        disabled={loading ||
+                            !(formData?.name && formData?.name?.length > 0) ||
+                            !(formData?.description && formData?.description?.length > 0)
+                        }
                     >
                         Save
                     </Button>

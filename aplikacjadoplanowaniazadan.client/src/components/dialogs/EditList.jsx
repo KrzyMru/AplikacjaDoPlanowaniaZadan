@@ -39,12 +39,14 @@ const EditList = ({ open, onClose, taskList, editList, icons }) => {
             <DialogContent>
                 <Box sx={{ display: 'flex', flexWrap: 'noWrap', alignItems: 'center' }}>
                     <TextField name="name" label="Name" variant="outlined"
+                        required
                         defaultValue={formData?.name}
                         fullWidth sx={{ mb: 2, mt: 2, mr: 1, flexGrow: 1 }}
                         onChange={(event) => {
                             const { name, value } = event.target;
                             setFormData((prev) => ({ ...prev, [name]: value }))
                         }}
+                        error={!(formData?.name && formData?.name?.length > 0)}
                     />
                     <FormControl sx={{ width: '80px', height: '56px', mr: '12px' }}>
                         <InputLabel>Icon</InputLabel>
@@ -74,6 +76,7 @@ const EditList = ({ open, onClose, taskList, editList, icons }) => {
                     </FormControl>
                 </Box>
                 <TextField name="description" label="Description" variant="outlined"
+                    required
                     defaultValue={formData?.description}
                     multiline minRows={6} maxRows={6}
                     fullWidth sx={{ mb: 2 }}
@@ -81,6 +84,7 @@ const EditList = ({ open, onClose, taskList, editList, icons }) => {
                         const { name, value } = event.target;
                         setFormData((prev) => ({ ...prev, [name]: value }))
                     }}
+                    error={!(formData?.description && formData?.description?.length > 0)}
                 />
                 <MuiColorInput name="color" format="hex" value={formData?.color} label="Color"
                     onChange={(value) => {
@@ -98,9 +102,12 @@ const EditList = ({ open, onClose, taskList, editList, icons }) => {
                 <Box sx={{ position: 'relative' }}>
                     <Button
                         variant="contained"
-                        endIcon={<SaveIcon />}
+                        startIcon={<SaveIcon />}
                         onClick={() => handleEditList(formData)}
-                        disabled={loading}
+                        disabled={loading ||
+                            !(formData?.name && formData?.name?.length > 0) ||
+                            !(formData?.description && formData?.description?.length > 0)
+                        }
                     >
                         Save
                     </Button>
