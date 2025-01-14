@@ -1,4 +1,5 @@
 ﻿using AplikacjaDoPlanowaniaZadan.Server.DataModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests
 {
@@ -9,8 +10,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests
         public string listColor;
 		public string listIcon;
         public int id;
+        [Required]
         public string name;
-		public string description;
+        [Required]
+        public string description;
         public DateTime dueTo;
         public DateTime creationDate;
         public Status status;
