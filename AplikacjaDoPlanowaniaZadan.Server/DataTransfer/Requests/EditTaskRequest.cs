@@ -10,9 +10,7 @@ namespace AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests
         public string listColor;
 		public string listIcon;
         public int id;
-        [Required]
         public string name;
-        [Required]
         public string description;
         public DateTime dueTo;
         public DateTime creationDate;

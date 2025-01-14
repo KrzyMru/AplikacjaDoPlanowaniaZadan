@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using AplikacjaDoPlanowaniaZadan.Server.DataTransfer.Requests;
+using Azure.Core;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 {
@@ -31,8 +33,12 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 		[HttpPost("saveList")]
         public IActionResult saveList([FromBody] CreateListRequest request)
         {
-            // token, trzeba tego użyć wszędzie
-            var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
+			if (request.Name.IsNullOrEmpty() || request.Description.IsNullOrEmpty())
+			{
+				return BadRequest();
+			}
+			// token, trzeba tego użyć wszędzie
+			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
             var handler = new JwtSecurityTokenHandler();
             var decodedToken = handler.ReadJwtToken(token);
             var email = decodedToken.Claims.First(claim => claim.Type == "email").Value;
@@ -161,6 +167,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 		[HttpPost("editList")]
         public IActionResult EditList([FromBody] List updatedList)
         {
+			if (updatedList.Name.IsNullOrEmpty() || updatedList.Description.IsNullOrEmpty())
+			{
+				return BadRequest();
+			}
 			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
 			var handler = new JwtSecurityTokenHandler();
 			var decodedToken = handler.ReadJwtToken(token);

@@ -99,6 +99,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
         {
             try
             {
+				if(request.Name.IsNullOrEmpty() || request.Description.IsNullOrEmpty())
+				{
+					return BadRequest();
+				}
 				var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
 				var handler = new JwtSecurityTokenHandler();
 				var decodedToken = handler.ReadJwtToken(token);
@@ -276,6 +280,10 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
 		[HttpPost("editTask")]
 		public IActionResult EditTask([FromBody] Task request)
 		{
+			if (request.Name.IsNullOrEmpty() || request.Description.IsNullOrEmpty())
+			{
+				return BadRequest();
+			}
 			var token = Request.Headers[HeaderNames.Authorization].FirstOrDefault()?.Split(" ").Last();
 			var handler = new JwtSecurityTokenHandler();
 			var decodedToken = handler.ReadJwtToken(token);
