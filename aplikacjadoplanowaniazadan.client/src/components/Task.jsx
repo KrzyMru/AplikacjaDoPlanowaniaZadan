@@ -124,7 +124,7 @@ export default function Task({ task, toggleTask, deleteTask, editTask, loadingAc
                                     <ListIcon />
                             }
                         </ListItemIcon>
-                        <Typography
+                        <Typography variant="caption"
                             sx={[(theme) => ({
                                 flexGrow: 1, maxHeight: '24px',
                                 overflow: 'hidden',
@@ -159,7 +159,7 @@ export default function Task({ task, toggleTask, deleteTask, editTask, loadingAc
                     <Divider flexItem orientation="vertical" sx={{ mr: {xs: 0, sm: 1}, display: "block" }} />
                     <Box sx={{ display: task?.dueTo ? { xs: "none", sm: "flex" } : "none", flexDirection: 'column', p: 1, width: '80px' }}>
                         <Typography variant="overline" align="center">
-                            {task?.status !== 2 ? "Due" : "Completed"}
+                            {task?.status !== 2 ? "Due" : "Done"}
                         </Typography>
                         <Typography variant="caption" align="center">
                             {task?.dueTo?.substring(11, 19)}

@@ -53,8 +53,8 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Services
                     {
                         var notification = new Notification
                         {
-                            Title = "Zadanie stało się zaległe",
-                            Content = $"Zadanie '{task.Name}' na liście '{task.List.Name}' zmieniło status z '{previousStatus}' na 'During'.",
+                            Title = "A task passed its due date",
+                            Content = $"Task '{task.Name}' from list '{task.List.Name}' is now overdue.",
                             SendDate = DateTime.Now,
                             UserId = user.Id
                         };

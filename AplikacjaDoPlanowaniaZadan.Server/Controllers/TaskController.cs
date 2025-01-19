@@ -349,8 +349,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
             {
                 var due2 = task.DueTo;
                 var statusBefore = task.Status;  // Zapisz poprzedni status, aby dostarczyć informacje w powiadomieniu
-                string notificationTitle = "";
-                string notificationContent = "";
 
                 switch (task.Status)
                 {
@@ -359,15 +357,11 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                             task.Status = Status.During;
                         else
 							task.Status = Status.Planned;
-                        notificationTitle = "Zadanie zostało ponownie zaplanowane";
-                        notificationContent = $"Zadanie {task.Name} zostało przeniesione z powrotem do stanu 'Planned'.";
                         break;
 
                     case Status.Planned:
                     case Status.During:
                         task.Status = Status.Finished;
-                        notificationTitle = "Zadanie zostało zakończone";
-                        notificationContent = $"Zadanie {task.Name} zostało oznaczone jako 'Finished'.";
                         break;
 
                     default:
@@ -385,19 +379,6 @@ namespace AplikacjaDoPlanowaniaZadan.Server.Controllers
                     .Where(u => u.Email == email)
                     .FirstOrDefault();
 
-                if (user != null)
-                {
-                    var notification = new Notification
-                    {
-                        Title = notificationTitle,
-                        Content = notificationContent,
-                        SendDate = DateTime.Now,
-                        UserId = user.Id
-                    };
-
-                    _context.Notifications.Add(notification);
-                    _context.SaveChanges();
-                }
 				var taskSelect = _context.Tasks
 					.Where(t => t.Id == taskId)
 					.Include(t => t.List)
