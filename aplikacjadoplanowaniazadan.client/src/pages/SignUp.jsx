@@ -75,7 +75,15 @@ const SignUp = () => {
     }, []);
 
     return (
-        <Grid container sx={{ flexGrow: 1, overflow: 'hidden' }}>
+        <Grid container
+            sx={[(theme) => ({
+                flexGrow: 1, overflow: 'hidden',
+                ...theme.applyStyles('dark', {
+                    backgroundColor: 'grey',
+                }),
+            }),
+            ]}
+        >
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Paper elevation={24}
                     sx={{
